@@ -13,6 +13,8 @@ import packaging.version
 import github
 import requests
 
+import homefront
+
 _GITHUB_BOOTSTRAP_REPO = "twbs/bootstrap"
 _ARCHIVE_DIRECTORIES_TO_EXTRACT = {
     # * is non-greedy, ** is not supported
@@ -131,8 +133,9 @@ class Release:
             response = requests.get(url)
             if not response.ok:
                 response.close()
-                raise Exception(f"Failed to download {url}, HTTP response is "
-                                f"{response.status_code}")
+                raise homefront.HomefrontException(
+                    f"Failed to download {url}, HTTP response is "
+                    f"{response.status_code}")
 
             for chunk in response.iter_content(chunk_size=_BUFFER_SIZE):
                 destfile.write(chunk)
