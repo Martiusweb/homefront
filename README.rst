@@ -11,4 +11,4 @@ It is based on:
 Quickstart
 ----------
 
-TODO
+Run ``homefront-quickstart`` instead of ``pelican-quickstart``.
