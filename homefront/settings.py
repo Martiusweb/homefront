@@ -1,5 +1,5 @@
 # coding: utf-8
-from typing import Dict, Optional, Union
+from typing import Any, Dict, Optional, Union
 
 import os.path
 
@@ -8,10 +8,33 @@ import pelican
 #: Subdirectory in which homefront store its cached data
 CACHE_SUBDIR = "_homefront/"
 
+DEFAULT_SETTINGS = {
+    #: Bootstrap version to use, unless overriden in settings
+    "BOOTSTRAP_VERSION": "4.3",
+}
 
-def pelican_settings(basedir: str, config_name: Optional[str] = None) -> Dict:
+
+Settings = Dict[str, Any]
+
+
+def update(settings: Settings) -> None:
     """
-    Read settings for the pelican settup at the given location.
+    Update ``settings`` to defined undefined settings to their defaults.
+
+    :param settings: pelican settings dict
+    """
+    if "_homefront_settings_loaded" not in settings:
+        settings["_homefront_settings_loaded"] = True
+        for name, default in DEFAULT_SETTINGS.items():
+            if name not in settings:
+                settings[name] = default
+
+
+def read_pelican_settings(basedir: str, config_name: Optional[str] = None
+                          ) -> Settings:
+    """
+    Read settings for the pelican settup at the given location, injects
+    homefront settings.
 
     :param basedir: pelican website installation
     :param config_name: name of the config file under ``basedir``
@@ -19,7 +42,9 @@ def pelican_settings(basedir: str, config_name: Optional[str] = None) -> Dict:
     settings_filename = os.path.join(
         basedir, config_name or pelican.DEFAULT_CONFIG_NAME)
 
-    return pelican.read_settings(settings_filename)
+    settings = pelican.read_settings(settings_filename)
+    update(settings)
+    return settings
 
 
 def get_cache_dir(settings: Union[str, Dict], basedir: str = "") -> str:
