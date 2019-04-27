@@ -6,11 +6,18 @@ import os.path
 import pelican
 
 #: Subdirectory in which homefront store its cached data
-CACHE_SUBDIR = "_homefront/"
+CACHE_SUBDIR = "_homefront"
 
 DEFAULT_SETTINGS = {
     #: Bootstrap version to use, unless overriden in settings
     "BOOTSTRAP_VERSION": "4.3",
+    #: Sass source pattern: files matching this pattern in the base path will
+    #: be compiled with Sass.
+    "SASS_SOURCE_PATTERN": "scss/[!_]*.scss",
+    #: Sass include path, as an iterable of path
+    "SASS_INCLUDE_PATH": ("scss/vendor", ),
+    #: Sass output path (relative to the output directory of pelican)
+    "SASS_OUTPUT_PATH": "css",
 }
 
 
