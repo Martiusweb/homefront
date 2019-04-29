@@ -183,8 +183,7 @@ class Release:
                     if os.path.exists(dest):
                         shutil.rmtree(dest)
 
-                    print(os.path.join(tmpdir, src), dest)
-                    os.renames(os.path.join(tmpdir, src), dest)
+                    shutil.move(os.path.join(tmpdir, src), dest)
 
 
 def parse_version(version: Version) -> ParsedVersion:
