@@ -29,6 +29,12 @@ _BUFFER_SIZE = 1024 * 8  # 8KiB
 _ALL_MATCHER = f"[^{re.escape(os.path.sep)}]*"
 
 
+ParsedVersion = Union[packaging.version.Version,
+                      packaging.version.LegacyVersion]
+
+Version = Union[str, ParsedVersion]
+
+
 def _translate_pattern(pattern: str) -> re.Pattern:
     # Make sure we don't match the path separator with the "*"
     # except for the last one. This is a bit ugly but it will be
@@ -53,14 +59,13 @@ class Release:
         """
         :param required_version: version of the package to get
         :param repo: repository name (with owner)
+        :raise: packaging.version.InvalidVersion
         """
-        version = packaging.version.parse(required_version)
-        if not version or not version.release:
-            raise ValueError(f"Failed to parse version {required_version}")
+        version = parse_version(required_version)
 
         self.repo: str = repo
-        self.required_version: packaging.version.Version = version
-        self.release_version: Optional[packaging.version.Version] = None
+        self.required_version: ParsedVersion = version
+        self.release_version: Optional[ParsedVersion] = None
         self.release: Union[None, github.GitRelease.GitRelease, str] = None
         self.destination: Union[str, os.PathLike] = destination
 
@@ -81,22 +86,13 @@ class Release:
         releases = api.get_repo(self.repo).get_releases()
 
         for candidate in releases:
-            version = packaging.version.parse(candidate.tag_name.lstrip("v"))
-
-            # Can't parse this release version
-            if not version or not version.release:
-                continue
+            version = parse_version(candidate.tag_name.lstrip("v"))
 
             # A stable version is required
             if version.is_prerelease:
                 continue
 
-            # The major version must be identical
-            if self.required_version.release[0] != version.release[0]:
-                continue
-
-            # The minor must be >= to the one expected
-            if self.required_version.release[1] < version.release[1]:
+            if not version_matches(self.required_version, version):
                 continue
 
             # keep this version if it's more recent that the one we have
@@ -189,6 +185,42 @@ class Release:
 
                     print(os.path.join(tmpdir, src), dest)
                     os.renames(os.path.join(tmpdir, src), dest)
+
+
+def parse_version(version: Version) -> ParsedVersion:
+    """
+    Parse a version string or return the already parsed object.
+    Assume that a ``release`` component is required.
+
+    :param version: version
+    :raise: packaging.version.InvalidVersion
+    """
+    if isinstance(version, str):
+        result = packaging.version.parse(version)
+    else:
+        result = version
+
+    if not result.release:
+        raise packaging.version.InvalidVersion(
+            f"Can not get a release from version {version}")
+
+    return result
+
+
+def version_matches(required: Version, candidate: Version) -> bool:
+    """
+    Return ``True`` if ``candidate`` is a version compatible with ``required``.
+
+    Compatible means that they have the same major version, and that
+    ``candidate`` is a release greater or equal to ``required``.
+    """
+    required = parse_version(required)
+    candidate = parse_version(candidate)
+
+    # The major version must be identical, and candidate must be above or equal
+    # to the required version
+    return (required.release[0] == candidate.release[0] and
+            candidate >= required)
 
 
 def download_bootstrap(version: str, destination: Union[str, os.PathLike]
