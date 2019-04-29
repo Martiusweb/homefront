@@ -18,7 +18,7 @@ DEFAULT_SETTINGS: Settings = {
     "SASS_SOURCE_PATTERN": "scss/[!_]*.scss",
     #: Sass include path, as an iterable of path
     "SASS_INCLUDE_PATH": ("scss/vendor", ),
-    #: Sass output path (relative to the output directory of pelican)
+    #: Sass output path (relative to ``THEME_STATIC_DIR``)
     "SASS_OUTPUT_PATH": "css",
     #: Sass output style, one of 'nested', 'expanded', 'compact', 'compressed'
     "SASS_OUTPUT_STYLE": "compressed",

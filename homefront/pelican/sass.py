@@ -21,6 +21,9 @@ class SassGenerator(homefront.generators.Generator):  # pylint: disable=R0903
     """
     Compile and minify sass files and move them to a static folder.
 
+    Sources are looked into the directory of the activated theme, under
+    ``SASS_SOURCE_PATTERN``.
+
     Does nothing unless configured, it is not required to include this plugin
     when using ``homefront.bootstrap``.
     """
@@ -29,7 +32,9 @@ class SassGenerator(homefront.generators.Generator):  # pylint: disable=R0903
 
     def generate_output(self, _) -> None:
         sass_output_path = os.path.join(
-            self.output_path, self.settings["SASS_OUTPUT_PATH"])
+            self.output_path,
+            self.settings["THEME_STATIC_DIR"],
+            self.settings["SASS_OUTPUT_PATH"])
 
         include_path = list(itertools.chain(
             self.include_path, self.settings["SASS_INCLUDE_PATH"]))
@@ -37,7 +42,8 @@ class SassGenerator(homefront.generators.Generator):  # pylint: disable=R0903
         LOG.debug("Sass include_path is: %s", include_path)
 
         # Find files from configuration, use glob to list files
-        pattern = self.settings["SASS_SOURCE_PATTERN"]
+        pattern = os.path.join(self.settings["THEME"],
+                               self.settings["SASS_SOURCE_PATTERN"])
         sources = itertools.chain(self.sources, glob.iglob(pattern))
 
         os.makedirs(sass_output_path, exist_ok=True)
@@ -52,12 +58,12 @@ class SassGenerator(homefront.generators.Generator):  # pylint: disable=R0903
             destname = os.path.splitext(os.path.basename(source))[0]
 
             LOG.info("Compiling %s to %s",
-                     os.path.relpath(source, self.path),
-                     os.path.join(self.settings["SASS_OUTPUT_PATH"], destname))
+                     source,
+                     os.path.join(sass_output_path, destname) + ".css")
 
             if source_map_args:
                 source_map_args["source_map_filename"] = os.path.join(
-                    self.settings["SASS_OUTPUT_PATH"],
+                    sass_output_path,
                     destname + ".css.map")
 
             css = sass.compile(
@@ -69,8 +75,7 @@ class SassGenerator(homefront.generators.Generator):  # pylint: disable=R0903
             if source_map_args:
                 css, source_map = css
 
-            dest = os.path.join(self.output_path,
-                                self.settings["SASS_OUTPUT_PATH"], destname)
+            dest = os.path.join(sass_output_path, destname)
 
             with open(dest + ".css", "w") as css_file:
                 css_file.write(css)
