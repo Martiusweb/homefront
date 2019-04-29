@@ -52,21 +52,26 @@ class SassGenerator(homefront.generators.Generator):  # pylint: disable=R0903
 
         source_map_args = {}
         if self.settings["SASS_GENERATE_SOURCE_MAP"]:
-            source_map_args["source_comments"] = True
+            source_map_args["source_comments"] = False
+            # We use omit_source_map_url because sass will generate a
+            # sourceMappingURL relative to the source filename, which is not
+            # what we want.
+            # We still need to specify source_map_filename to enable the
+            # generation of the sourcemap, but the value doesn't matter
+            source_map_args["source_map_filename"] = ".map"
+            source_map_args["omit_source_map_url"] = True
+            # include vendors content in map (makes a larger map file, but
+            # vendors are not in the output)
+            source_map_args["source_map_contents"] = True
 
         for source in sources:
-            destname = os.path.splitext(os.path.basename(source))[0]
+            destname = os.path.splitext(os.path.basename(source))[0] + ".css"
 
             LOG.info("Compiling %s to %s",
                      source,
-                     os.path.join(sass_output_path, destname) + ".css")
+                     os.path.join(sass_output_path, destname))
 
-            if source_map_args:
-                source_map_args["source_map_filename"] = os.path.join(
-                    sass_output_path,
-                    destname + ".css.map")
-
-            css = sass.compile(
+            css = sass.compile(  # pylint: disable=E1101
                 filename=source,
                 output_style=self.settings["SASS_OUTPUT_STYLE"],
                 include_paths=include_path,
@@ -77,11 +82,12 @@ class SassGenerator(homefront.generators.Generator):  # pylint: disable=R0903
 
             dest = os.path.join(sass_output_path, destname)
 
-            with open(dest + ".css", "w") as css_file:
+            with open(dest, "w") as css_file:
                 css_file.write(css)
+                css_file.write(f"\n/*# sourceMappingURL={destname}.map */\n")
 
             if source_map_args:
-                with open(dest + ".css.map", "w") as css_file:
+                with open(dest + ".map", "w") as css_file:
                     css_file.write(source_map)
 
 
