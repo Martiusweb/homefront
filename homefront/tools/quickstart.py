@@ -61,7 +61,7 @@ def main():
         os.makedirs(cachedir, exist_ok=True)
 
         bootstrap_dir = os.path.join(cachedir, f"bootstrap-{version}")
-        homefront.bootstrap.download_bootstrap(version, bootstrap_dir)
+        homefront.bootstrap.download(version, bootstrap_dir)
 
         for filename in ("_variables.scss", ):
             shutil.copy(

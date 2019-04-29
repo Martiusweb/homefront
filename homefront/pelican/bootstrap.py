@@ -10,6 +10,7 @@ import pelican.generators
 import pelican.signals
 
 import homefront
+import homefront.release
 import homefront.bootstrap
 import homefront.pelican.sass
 
@@ -112,12 +113,12 @@ class BootstrapPlugin:
             candidate_version = os.path.basename(candidate)
             candidate_version = candidate_version.split("-", 1)[1]
 
-            if homefront.bootstrap.version_matches(
+            if homefront.release.version_matches(
                     version, candidate_version):
                 return candidate
 
         # Could'nt find suitable version of bootstrap, let's install it
-        homefront.bootstrap.download_bootstrap(version, bootstrap_path)
+        homefront.bootstrap.download(version, bootstrap_path)
         return bootstrap_path
 
 
