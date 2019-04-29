@@ -7,6 +7,7 @@ import logging
 import os
 import re
 import shutil
+import tarfile
 import tempfile
 import zipfile
 
@@ -27,6 +28,8 @@ Version = Union[str, ParsedVersion]
 _ALL_MATCHER = f"[^{re.escape(os.path.sep)}]*"
 
 _BUFFER_SIZE = 1024 * 8  # 8KiB
+
+_NPM_REGISTRY_URL = "https://registry.npmjs.org"
 
 
 def _translate_pattern(pattern: str) -> re.Pattern:
@@ -212,6 +215,50 @@ class GithubRelease(Release):
         extract_zip(source, destination, self.to_extract.keys())
 
 
+class NpmRelease(Release):
+    def __init__(self, required_version: str, project: str,
+                 destination: Union[str, os.PathLike],
+                 to_extract: Optional[Dict] = None):
+        super().__init__(required_version, project, destination, to_extract)
+        self.release_url: str = ""
+
+    def get_npm_release_url(self) -> str:
+        if self.release_url:
+            return self.release_url
+
+        response = requests.get(f"{_NPM_REGISTRY_URL}/{self.artifact}")
+
+        if not response.ok:
+            raise homefront.Error(f"Failed to fetch {self.artifact} metadata "
+                                  "from npm registy")
+
+        for candidate in response.json()["versions"].values():
+            try:
+                version = parse_version(candidate["version"])
+            except packaging.version.InvalidVersion as exc:
+                LOG.debug("Failed to parse version %s: %s",
+                          candidate["version"], exc)
+                continue
+
+            if self.is_best_candidate(version):
+                self.release_version = version
+                self.release_url = candidate["dist"]["tarball"]
+
+        if not self.release_url:
+            raise ValueError(f"Could not find a release for {self.name} "
+                             f"satisfying version >= {version}")
+
+        return self.release_url
+
+    @property
+    def url(self) -> str:
+        return self.get_npm_release_url()
+
+    def extract(self, source: Union[str, IO[bytes]],
+                destination: Union[str, os.PathLike]) -> None:
+        extract_tar(source, destination, self.to_extract)
+
+
 def parse_version(version: Version) -> ParsedVersion:
     """
     Parse a version string or return the already parsed object.
@@ -263,6 +310,30 @@ def extract_zip(source: Union[str, IO[bytes]],
             archive.extractall(destination)
         else:
             for filename in archive.namelist():
+                for pattern in patterns:
+                    if pattern.match(filename):
+                        LOG.debug("Extracting %s to %s", filename, destination)
+                        archive.extract(filename, destination)
+                        break
+
+
+def extract_tar(source: Union[str, IO[bytes]],
+                destination: Union[str, os.PathLike],
+                patterns: List[str]) -> None:
+    """
+    extract contents from source to the destination.
+    If patterns are provided, only files matching them are extracted.
+    """
+    if patterns:
+        patterns = list(map(_translate_pattern, patterns))
+
+    args = {("name" if isinstance(source, str) else "fileobj"): source}
+
+    with tarfile.open(**args) as archive:
+        if not patterns:
+            archive.extractall(destination)
+        else:
+            for filename in archive.getnames():
                 for pattern in patterns:
                     if pattern.match(filename):
                         LOG.debug("Extracting %s to %s", filename, destination)
