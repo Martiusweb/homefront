@@ -5,10 +5,12 @@ import os.path
 
 import pelican
 
+Settings = Dict[str, Any]
+
 #: Subdirectory in which homefront store its cached data
 CACHE_SUBDIR = "_homefront"
 
-DEFAULT_SETTINGS = {
+DEFAULT_SETTINGS: Settings = {
     #: Bootstrap version to use, unless overriden in settings
     "BOOTSTRAP_VERSION": "4.3",
     #: Sass source pattern: files matching this pattern in the base path will
@@ -18,10 +20,11 @@ DEFAULT_SETTINGS = {
     "SASS_INCLUDE_PATH": ("scss/vendor", ),
     #: Sass output path (relative to the output directory of pelican)
     "SASS_OUTPUT_PATH": "css",
+    #: Sass output style, one of 'nested', 'expanded', 'compact', 'compressed'
+    "SASS_OUTPUT_STYLE": "compressed",
+    #: Sass source maps generation
+    "SASS_GENERATE_SOURCE_MAP": True,
 }
-
-
-Settings = Dict[str, Any]
 
 
 def update(settings: Settings) -> None:

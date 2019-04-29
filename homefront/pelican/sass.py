@@ -44,23 +44,40 @@ class SassGenerator(homefront.generators.Generator):  # pylint: disable=R0903
 
         LOG.debug("Sass compiler is looking for %s", pattern)
 
+        source_map_args = {}
+        if self.settings["SASS_GENERATE_SOURCE_MAP"]:
+            source_map_args["source_comments"] = True
+
         for source in sources:
-            destname = os.path.splitext(os.path.basename(source))[0] + ".css"
+            destname = os.path.splitext(os.path.basename(source))[0]
 
             LOG.info("Compiling %s to %s",
                      os.path.relpath(source, self.path),
                      os.path.join(self.settings["SASS_OUTPUT_PATH"], destname))
 
+            if source_map_args:
+                source_map_args["source_map_filename"] = os.path.join(
+                    self.settings["SASS_OUTPUT_PATH"],
+                    destname + ".css.map")
+
             css = sass.compile(
                 filename=source,
-                output_style=_DEFAULT_OUTPUT_STYLE,
-                include_paths=include_path)
+                output_style=self.settings["SASS_OUTPUT_STYLE"],
+                include_paths=include_path,
+                **source_map_args)
+
+            if source_map_args:
+                css, source_map = css
 
             dest = os.path.join(self.output_path,
                                 self.settings["SASS_OUTPUT_PATH"], destname)
 
-            with open(dest, "w") as css_file:
+            with open(dest + ".css", "w") as css_file:
                 css_file.write(css)
+
+            if source_map_args:
+                with open(dest + ".css.map", "w") as css_file:
+                    css_file.write(source_map)
 
 
 def get_generators(_: pelican.Pelican) -> Type[SassGenerator]:
