@@ -13,6 +13,7 @@ import homefront
 import homefront.release
 import homefront.bootstrap
 import homefront.pelican.sass
+import homefront.pelican.googleclosure
 
 LOG = logging.getLogger(__name__)
 
@@ -45,7 +46,7 @@ class BootstrapPlugin:
 
     def enable(self) -> None:
         pelican.signals.initialized.connect(self.initialize)
-        pelican.signals.get_generators.connect(self.get_generator)
+        pelican.signals.get_generators.connect(self.get_generators)
 
         self.update_include_path()
 
@@ -56,7 +57,7 @@ class BootstrapPlugin:
 
         self.update_include_path(enable=False)
 
-        pelican.signals.get_generators.disconnect(self.get_generator)
+        pelican.signals.get_generators.disconnect(self.get_generators)
         pelican.signals.get_generators.disconnect(self.initialize)
 
     def update_include_path(self, enable: bool = True) -> None:
@@ -87,12 +88,13 @@ class BootstrapPlugin:
             LOG.exception("Failed to initialize bootstrap, plugin deactivated")
             self.disable()
 
-    def get_generator(self, _: pelican.Pelican  # pylint: disable=R0201
-                      ) -> Type[pelican.generators.Generator]:
+    def get_generators(self, _: pelican.Pelican  # pylint: disable=R0201
+                       ) -> Type[pelican.generators.Generator]:
         """
         Return the class of the generator implemented by this plugin.
         """
-        return homefront.pelican.sass.SassGenerator
+        return (homefront.pelican.sass.SassGenerator,
+                homefront.pelican.googleclosure.GoogleClosureGenerator, )
 
     def ensure_bootstrap_ready(self, version: str) -> None:
         if not self.pelican:

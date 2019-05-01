@@ -1,7 +1,8 @@
 # coding: utf-8
+from typing import List, Union
 
-from typing import Union
-
+import dataclasses
+import enum
 import os
 import sys
 
@@ -37,3 +38,29 @@ def download(version: str, destination: Union[str, os.PathLike]) -> None:
     """
     release = Release(version, destination)
     release.install()
+
+
+class CompilationLevel(enum.Enum):
+    WHITESPACE_ONLY = 0
+    SIMPLE_OPTIMIZATIONS = 1
+    ADVANCED_OPTIMIZATIONS = 2
+
+    def __str__(self):
+        return self.name
+
+
+@dataclasses.dataclass
+class Artifact:
+    # pylint: disable=R0903
+    output_name: str
+    sources: List[str]
+    externs: List[str] = dataclasses.field(default_factory=list)
+    compilation_level: CompilationLevel = CompilationLevel.SIMPLE_OPTIMIZATIONS
+
+    def resolve_sources(self, basedir: Union[str, os.PathLike]):
+        for source in self.sources:
+            yield os.path.join(basedir, source)
+
+    def resolve_externs(self, basedir: Union[str, os.PathLike]):
+        for extern in self.externs:
+            yield os.path.join(basedir, extern)
