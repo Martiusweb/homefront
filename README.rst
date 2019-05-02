@@ -20,6 +20,12 @@ actively maintain this project.
 While I'm open to pull requests, do not expect me to work on bugs or implement
 features requested in issues if I don't need them.
 
+In order to avoid external dependencies (java, node, npm), Homefront uses the
+native distribution of the Google closure compiler.
+
+It is possible to add support for other platforms with java in roughly the same
+fashion (see ``homefront/googleclosure.py``).
+
 License
 -------
 
@@ -57,3 +63,4 @@ and enable these plugins in your existing pelican configuration:
   ``@import "bootstrap/transitions";``,
 * ``homefront.sass``: implicitly loaded by the bootstrap plugin, can be used
   if you want to compile scss files without using bootstrap.
+* ``homefront.googleclosure``: used to minify JS files.
