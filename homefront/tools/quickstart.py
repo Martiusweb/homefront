@@ -3,8 +3,11 @@
 Wraps and extends the pelican-quickstart tool to create directories for Sass
 (CSS) and Javascript sources.
 """
-import os.path
+from typing import Dict
+
+import os
 import shutil
+import sys
 
 import pkg_resources
 
@@ -19,70 +22,102 @@ import homefront.settings
 _DEFAULT_THEME = "themes/default"
 
 
-def main():
+def step(func, desc=None, details=None):
+    if desc:
+        print(desc)
+    elif details:
+        print(func.__doc__ + " " + details)
+    else:
+        print(func.__doc__)
+
+    try:
+        return func()
+    except (homefront.Error, OSError) as error:
+        print(f"Error: {error}", file=sys.stderr)
+
+
+def pelican_quickstart() -> str:
+    """
+    Runs pelican-quickstart
+    """
     pelican.tools.pelican_quickstart.main()
     pelican_qs_conf = pelican.tools.pelican_quickstart.CONF
-    base_dir = pelican_qs_conf['basedir']
-    theme_dir = os.path.join(base_dir, _DEFAULT_THEME)
+    return pelican_qs_conf['basedir']
 
-    settings_filename = os.path.join(base_dir, pelican.DEFAULT_CONFIG_NAME)
 
-    print("Creating Homefront project")
+class Website:
+    def __init__(self, base_dir: str):
+        self.base_dir: str = base_dir
+        self.theme_dir: str = os.path.join(base_dir, _DEFAULT_THEME)
+        self.settings_filename: str = os.path.join(
+            base_dir, pelican.DEFAULT_CONFIG_NAME)
 
-    # We load settings before updating theme because they may not load until
-    # the project is created
-    try:
-        settings = pelican.read_settings(settings_filename)
-        homefront.settings.update(settings)
-    except (homefront.Error, OSError) as error:
-        print(f"Error: {error}")
+        # We load settings before updating theme because they may not load
+        # until the project is created
+        self.settings: Dict = pelican.read_settings(self.settings_filename)
+        homefront.settings.update(self.settings)
 
-    try:
-        with open(settings_filename, "a") as settings_file:
+    def update_settings(self) -> None:
+        """Updating the settings file"""
+        with open(self.settings_filename, "a") as settings_file:
             settings_file.write(
                 "\n\n# Plugins\n"
                 "PLUGINS = ('homefront.pelican.bootstrap', )\n"
-                f"THEME = '{theme_dir}'")
-    except (homefront.Error, OSError) as error:
-        print(f"Error: {error}")
+                f"THEME = '{self.theme_dir}'")
 
-    try:
+    def install_theme(self) -> None:
+        """Copying theme boilerplate"""
         theme_source_dir = pkg_resources.resource_filename(
             "homefront", _DEFAULT_THEME)
-        shutil.copytree(theme_source_dir, theme_dir)
-    except (homefront.Error, OSError) as error:
-        print(f"Error: {error}")
 
-    try:
-        version = settings["BOOTSTRAP_VERSION"]
-        print(f"Downloading bootstrap {version}")
+        shutil.copytree(theme_source_dir, self.theme_dir)
 
-        cachedir = homefront.settings.get_cache_dir(settings, base_dir)
+    def install_bootstrap(self) -> None:
+        """Installing bootstrap"""
+        version = self.settings["BOOTSTRAP_VERSION"]
+
+        cachedir = homefront.settings.get_cache_dir(
+            self.settings, self.base_dir)
+
         os.makedirs(cachedir, exist_ok=True)
 
         bootstrap_dir = os.path.join(cachedir, f"bootstrap-{version}")
         homefront.bootstrap.download(version, bootstrap_dir)
 
+        os.makedirs(os.path.join(self.theme_dir, "scss"), exist_ok=True)
+
         for filename in ("_variables.scss", ):
             shutil.copy(
                 os.path.join(bootstrap_dir, "scss", "bootstrap", filename),
-                os.path.join(theme_dir, "scss", filename))
-    except (homefront.Error, OSError) as error:
-        print(f"Error: {error}")
+                os.path.join(self.theme_dir, "scss", filename))
 
-    try:
-        # Add a .gitignore
-        with open(os.path.join(base_dir, ".gitignore"), "a") as gitignore:
+    def create_gitignore(self) -> None:
+        with open(os.path.join(self.base_dir, ".gitignore"), "a") as gitignore:
             gitignore.write(
                 "\n# Added by homefront\n"
                 "__pycache__\n"
             )
 
+            gitignore.write(
+                os.path.join(self.theme_dir, 'js', "node_modules\n"))
+
             for ignored in ("CACHE_PATH", "OUTPUT_PATH", ):
-                ignored = settings[ignored].rstrip(os.path.sep) + os.path.sep
+                ignored = (self.settings[ignored].rstrip(os.path.sep) +
+                           os.path.sep)
                 gitignore.write(f"{ignored}\n")
-    except (homefront.Error, OSError) as error:
-        print(f"Error: {error}")
+
+
+def main():
+    base_dir = pelican_quickstart()
+
+    print("Creating Homefront project")
+    website = Website(base_dir)
+
+    step(website.update_settings)
+    step(website.install_theme)
+    step(website.install_bootstrap,
+         details=website.settings["BOOTSTRAP_VERSION"])
+    step(website.create_gitignore)
 
     print("Done, homefront project structure created")
-    print(f"You can customize the theme in {theme_dir}")
+    print(f"You can customize the theme in {website.theme_dir}")
