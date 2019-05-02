@@ -9,6 +9,7 @@ import datetime
 import json
 import os
 import shutil
+import subprocess
 import sys
 
 import pkg_resources
@@ -118,6 +119,17 @@ class Website:
 
             json.dump(contents, package_json, indent=2)
 
+    def install_npm_dependencies(self) -> None:
+        """Installing javascript dependencies"""
+        js_dir = os.path.join(self.theme_dir, "js")
+
+        try:
+            subprocess.run(['npm', 'install'], cwd=js_dir,
+                           check=True, capture_output=True)
+        except subprocess.CalledProcessError as exc:
+            print("Failed to run npm:", file=sys.stderr)
+            print(exc.stderr.decode(), file=sys.stderr)
+
     def create_gitignore(self) -> None:
         with open(os.path.join(self.base_dir, ".gitignore"), "a") as gitignore:
             gitignore.write(
@@ -145,6 +157,7 @@ def main():
     step(website.install_bootstrap,
          details=website.settings["BOOTSTRAP_VERSION"])
     step(website.create_package_json)
+    step(website.install_npm_dependencies)
     step(website.create_gitignore)
 
     print("Done, homefront project structure created")
