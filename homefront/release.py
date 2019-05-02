@@ -3,6 +3,7 @@ from typing import Dict, IO, List, Optional, Union
 
 import fnmatch
 import glob
+import json
 import logging
 import os
 import re
@@ -11,8 +12,8 @@ import tarfile
 import tempfile
 import zipfile
 
-import github
 import packaging.version
+import github
 import requests
 
 import homefront
@@ -80,11 +81,13 @@ class Release:
         self.required_version: ParsedVersion = version
         self.release_version: Optional[ParsedVersion] = None
         self.destination: Union[str, os.PathLike] = destination
-        self.to_extract: ExtractTarget = {
-            "package/package.json": "package.json"
+        self.to_extract: ExtractTarget = to_extract or {
+            "package/": ""
         }
-        if to_extract:
-            self.to_extract.update(to_extract)
+
+    def __repr__(self):
+        clsname = type(self).__name__
+        return f"<{clsname} {self.artifact} {self.required_version}>"
 
     @property
     def url(self):
@@ -269,6 +272,24 @@ class NpmRelease(Release):
                 destination: Union[str, os.PathLike]) -> None:
         extract_tar(source, destination, self.to_extract)
 
+    def get_dependencies(self) -> List['NpmRelease']:
+        packagejson_filename = os.path.join(
+            self.destination,
+            self.to_extract.get("package/package.json") or "package.json")
+
+        with open(packagejson_filename) as packagejson:
+            package = json.load(packagejson)
+
+        deps = package.get("dependencies", {})
+        deps.update(package.get("peerDependencies", {}))
+
+        destination = os.path.join(self.destination, "dependencies")
+        for dependency, version in deps.items():
+            version = parse_npm_version(version)
+            yield NpmRelease(
+                version, dependency,
+                os.path.join(destination, f"{dependency}-{version}"))
+
 
 def parse_version(version: Version) -> ParsedVersion:
     """
@@ -288,6 +309,45 @@ def parse_version(version: Version) -> ParsedVersion:
             f"Can not get a release from version {version}")
 
     return result
+
+
+def _parse_npm_version(version: str) -> Optional[ParsedVersion]:
+    if version.endswith(".x"):
+        return _parse_npm_version(version[:-2])
+
+    if " - " in version:
+        return parse_version(version.split(" - ")[1].strip())
+
+    if " " in version:
+        for candidate in version.split():
+            candidate = _parse_npm_version(version)
+            if candidate:
+                return candidate
+    else:
+        if version[0].isdigit():
+            return parse_version(version)
+
+        operators = (">=", "~", "^")
+        if version.startswith(operators):
+            return parse_version(version.lstrip("".join(operators)))
+
+    return None
+
+
+def parse_npm_version(version: str) -> ParsedVersion:
+    """
+    Parse a version as supported in npm-package.
+    See: https://docs.npmjs.com/files/package.json
+
+    Note: only a useful subset is supported.
+    """
+    parsed = _parse_npm_version(version)
+
+    if parsed:
+        return parsed
+
+    raise packaging.version.InvalidVersion(
+        f"Unsupported version specifier {version}")
 
 
 def version_matches(required: Version, candidate: Version) -> bool:
