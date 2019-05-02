@@ -106,6 +106,8 @@ class BootstrapPlugin:
             if self.js_artifact:
                 self.js_artifact.bootstrap_path = os.path.join(
                     self.bootstrap_path, "js")
+                self.js_artifact.dependencies_path = os.path.join(
+                    self.bootstrap_path, "dependencies")
 
             LOG.info("Enabling bootstrap %s", settings["BOOTSTRAP_VERSION"])
             self.update_scss_include_path()

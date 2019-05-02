@@ -18,7 +18,7 @@ LOG = logging.getLogger(__name__)
 
 def _globs(patterns):
     patterns = list(patterns)
-    print("plop", patterns)
+    print(patterns) # TODO
     return itertools.chain.from_iterable(map(glob.iglob, patterns))
 
 
@@ -65,6 +65,7 @@ class GoogleClosureGenerator(homefront.generators.Generator):
                 ) -> None:
         cli = [self.get_compiler_filename(),
                "--compilation_level", str(compilation_level),
+               "--module_resolution", "NODE",
                "--js_output_file", output_name]
 
         source = None
@@ -79,10 +80,11 @@ class GoogleClosureGenerator(homefront.generators.Generator):
             cli.extend(("--externs", extern))
 
         try:
+            LOG.debug("Running %s", " ".join(cli))
             subprocess.run(cli, check=True, capture_output=True)
         except subprocess.CalledProcessError as exc:
             LOG.error("Google Closure Compiler failed with error:\n%s",
-                      exc.stderr)
+                      exc.stderr.decode())
 
 
 def get_generators(_: pelican.Pelican) -> Type[GoogleClosureGenerator]:
