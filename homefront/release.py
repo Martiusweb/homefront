@@ -80,7 +80,11 @@ class Release:
         self.required_version: ParsedVersion = version
         self.release_version: Optional[ParsedVersion] = None
         self.destination: Union[str, os.PathLike] = destination
-        self.to_extract: ExtractTarget = to_extract or {}
+        self.to_extract: ExtractTarget = {
+            "package/package.json": "package.json"
+        }
+        if to_extract:
+            self.to_extract.update(to_extract)
 
     @property
     def url(self):

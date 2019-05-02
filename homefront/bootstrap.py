@@ -8,24 +8,24 @@ import homefront
 import homefront.googleclosure
 import homefront.release
 
-_GITHUB_BOOTSTRAP_REPO = "twbs/bootstrap"
+_PACKAGE = "bootstrap"
 
 _ARCHIVE_DIRECTORIES_TO_EXTRACT = {
     # scss files are under a bootstrap directory, so they can be included with
     # "bootstrap/the_lib".
-    "*bootstrap-*/scss/": "scss/bootstrap",
+    "package/scss/": "scss/bootstrap",
     # js files are compressed and concatenated anyway.
-    "*bootstrap-*/js/src/": "js/",
+    "package/js/src/": "js/",
 }
 
 
-class Release(homefront.release.GithubRelease):
+class Release(homefront.release.NpmRelease):
     """
     Represents a release to fetch from github.
     """
     def __init__(self, required_version: str,
                  destination: Union[str, os.PathLike]):
-        super().__init__(required_version, _GITHUB_BOOTSTRAP_REPO, destination,
+        super().__init__(required_version, _PACKAGE, destination,
                          _ARCHIVE_DIRECTORIES_TO_EXTRACT)
         self.name = "Bootstrap"
 
