@@ -5,6 +5,7 @@ import os.path
 
 import pelican
 
+from homefront.bootstrap import bootstrapify
 from homefront.googleclosure import Artifact
 
 Settings = Dict[str, Any]
@@ -15,6 +16,9 @@ CACHE_SUBDIR = "_homefront"
 DEFAULT_SETTINGS: Settings = {
     #: Bootstrap version to use, unless overriden in settings
     "BOOTSTRAP_VERSION": "4.3",
+    #: Generate a boostrap Javascript artifact, the first argument is a
+    #: (possibly empty) artifact on which the boostrap modules are added.
+    "BOOTSTRAP_JS_ARTIFACT": bootstrapify(Artifact("bootstrap.js", []), "*"),
 
     #: Sass source pattern: files matching this pattern in the base path will
     #: be compiled with Sass.
@@ -29,7 +33,7 @@ DEFAULT_SETTINGS: Settings = {
     "SASS_GENERATE_SOURCE_MAP": True,
 
     #: Google Closure Compiler version to use
-    "GOOGLE_CLOSURE_COMPILER_VERSION": "20190415.0.0",
+    "GOOGLE_CLOSURE_COMPILER_VERSION": "20190325.0.0",
     #: Google Closure Compiler version to use
     "GOOGLE_CLOSURE_COMPILER_OUTPUT_PATH": "js",
     #: Google Closure Compiler artifacts as a list of googleclosure.Artifact:

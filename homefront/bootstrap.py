@@ -1,16 +1,21 @@
 # coding: utf-8
-from typing import Union
+from typing import List, Union
 
+import dataclasses
 import os
 
 import homefront
+import homefront.googleclosure
 import homefront.release
 
 _GITHUB_BOOTSTRAP_REPO = "twbs/bootstrap"
 
 _ARCHIVE_DIRECTORIES_TO_EXTRACT = {
+    # scss files are under a bootstrap directory, so they can be included with
+    # "bootstrap/the_lib".
     "*bootstrap-*/scss/": "scss/bootstrap",
-    "*bootstrap-*/js/src/": "js/bootstrap",
+    # js files are compressed and concatenated anyway.
+    "*bootstrap-*/js/src/": "js/",
 }
 
 
@@ -28,3 +33,36 @@ class Release(homefront.release.GithubRelease):
 def download(version: str, destination: Union[str, os.PathLike]) -> None:
     release = Release(version, destination)
     release.install()
+
+
+@dataclasses.dataclass
+class ArtifactWithBootstrap(homefront.googleclosure.Artifact):
+    """
+    Extended artifact which includes bootstrap sources.
+    """
+    bootstrap_modules: List[str] = dataclasses.field(default_factory=list)
+    bootstrap_path: Union[str, os.PathLike] = ""
+
+    @classmethod
+    def from_artifact(cls, artifact: homefront.googleclosure.Artifact
+                      ) -> 'ArtifactWithBootstrap':
+        return cls(artifact.output_name, artifact.sources, artifact.externs,
+                   artifact.compilation_level)
+
+    def resolve_sources(self, basedir: Union[str, os.PathLike]):
+        for module in self.bootstrap_modules:
+            yield os.path.join(self.bootstrap_path, module + ".js")
+
+        yield from super().resolve_sources(basedir)
+
+
+def bootstrapify(artifact: homefront.googleclosure.Artifact,
+                 *modules: List[str]):
+    """
+    Add boostrap ``modules`` to a Google Closure Compiler artifact.
+
+    By default, all modules are added.
+    """
+    result = ArtifactWithBootstrap.from_artifact(artifact)
+    result.bootstrap_modules = modules
+    return result

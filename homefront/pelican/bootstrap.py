@@ -1,5 +1,5 @@
 # coding: utf-8
-from typing import Type
+from typing import Optional, Type, Union
 
 import glob
 import logging
@@ -34,42 +34,58 @@ class BootstrapPlugin:
         return cls._instance
 
     def __init__(self):
-        self.pelican = None
-        self.enabled = False
-        self.bootstrap_path = None
+        self.pelican: pelican.Pelican = None
+        self.enabled: bool = False
+        self.bootstrap_path: Optional[Union[str, os.PathLike]] = None
+        self.js_artifact:\
+            Optional[homefront.bootstrap.ArtifactWithBootstrap] = None
 
         self.enable()
 
     @property
-    def bootstrap_sass_path(self):
+    def bootstrap_scss_path(self):
         return os.path.join(self.bootstrap_path, "scss")
 
     def enable(self) -> None:
         pelican.signals.initialized.connect(self.initialize)
         pelican.signals.get_generators.connect(self.get_generators)
 
-        self.update_include_path()
+        self.update_scss_include_path()
+        self.update_js_artifacts()
 
         self.enabled = True
 
     def disable(self) -> None:
         self.enabled = False
 
-        self.update_include_path(enable=False)
+        self.update_scss_include_path(enable=False)
+        self.update_js_artifacts(enable=False)
 
         pelican.signals.get_generators.disconnect(self.get_generators)
         pelican.signals.get_generators.disconnect(self.initialize)
 
-    def update_include_path(self, enable: bool = True) -> None:
+    def update_scss_include_path(self, enable: bool = True) -> None:
         if not self.bootstrap_path:
             return
 
+        include_path = homefront.pelican.sass.SassGenerator.include_path
+
         if enable:
-            include_path = homefront.pelican.sass.SassGenerator.include_path
-            include_path.append(self.bootstrap_sass_path)
+            include_path.append(self.bootstrap_scss_path)
         else:
-            include_path = homefront.pelican.sass.SassGenerator.include_path
-            include_path.remove(self.bootstrap_sass_path)
+            include_path.remove(self.bootstrap_scss_path)
+
+    def update_js_artifacts(self, enable: bool = True) -> None:
+        if not self.bootstrap_path and not self.js_artifact:
+            return
+
+        artifacts = homefront.pelican.googleclosure.GoogleClosureGenerator\
+            .artifacts
+
+        if enable:
+            artifacts.append(self.js_artifact)
+        else:
+            artifacts.remove(self.js_artifact)
 
     def initialize(self, pelican_object: pelican.Pelican) -> None:
         self.pelican = pelican_object
@@ -77,13 +93,23 @@ class BootstrapPlugin:
         try:
             settings = pelican_object.settings
             homefront.settings.update(settings)
+
             self.bootstrap_path = self.ensure_bootstrap_ready(
                 settings["BOOTSTRAP_VERSION"])
 
+            if not self.bootstrap_path:
+                raise homefront.Error
+
             LOG.debug("Bootstrap found at %s", self.bootstrap_path)
 
+            self.js_artifact = settings["BOOTSTRAP_JS_ARTIFACT"]
+            if self.js_artifact:
+                self.js_artifact.bootstrap_path = os.path.join(
+                    self.bootstrap_path, "js")
+
             LOG.info("Enabling bootstrap %s", settings["BOOTSTRAP_VERSION"])
-            self.update_include_path()
+            self.update_scss_include_path()
+            self.update_js_artifacts()
         except (homefront.Error, OSError):
             LOG.exception("Failed to initialize bootstrap, plugin deactivated")
             self.disable()
@@ -119,7 +145,7 @@ class BootstrapPlugin:
                     version, candidate_version):
                 return candidate
 
-        # Could'nt find suitable version of bootstrap, let's install it
+        # Couldn't find suitable version of bootstrap, let's install it
         homefront.bootstrap.download(version, bootstrap_path)
         return bootstrap_path
 
