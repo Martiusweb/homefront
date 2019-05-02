@@ -33,7 +33,7 @@ DEFAULT_SETTINGS: Settings = {
     "SASS_GENERATE_SOURCE_MAP": True,
 
     #: Google Closure Compiler version to use
-    "GOOGLE_CLOSURE_COMPILER_VERSION": "20190325.0.0",
+    "GOOGLE_CLOSURE_COMPILER_VERSION": "20190301.0.0",
     #: Google Closure Compiler version to use
     "GOOGLE_CLOSURE_COMPILER_OUTPUT_PATH": "js",
     #: Google Closure Compiler artifacts as a list of googleclosure.Artifact:

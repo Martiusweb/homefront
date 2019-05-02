@@ -46,14 +46,15 @@ class GoogleClosureGenerator(homefront.generators.Generator):
                          sources, externs, artifact.compilation_level)
 
     def get_compiler_filename(self) -> str:
-        cache_dir = homefront.settings.get_cache_dir(self.settings)
-        filename = os.path.join(cache_dir, "googleclosure", "compiler")
+        version = self.settings["GOOGLE_CLOSURE_COMPILER_VERSION"]
+        install_dir = os.path.join(
+            homefront.settings.get_cache_dir(self.settings),
+            f"googleclosure-{version}")
+        filename = os.path.join(install_dir,  "compiler")
 
         if not os.path.exists(filename):
             LOG.debug("Installing Google Closure Compiler")
-            homefront.googleclosure.download(
-                self.settings["GOOGLE_CLOSURE_COMPILER_VERSION"],
-                os.path.join(cache_dir, "googleclosure"))
+            homefront.googleclosure.download(version, install_dir)
 
         return filename
 
