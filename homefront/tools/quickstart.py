@@ -5,6 +5,8 @@ Wraps and extends the pelican-quickstart tool to create directories for Sass
 """
 from typing import Dict
 
+import datetime
+import json
 import os
 import shutil
 import sys
@@ -91,6 +93,31 @@ class Website:
                 os.path.join(bootstrap_dir, "scss", "bootstrap", filename),
                 os.path.join(self.theme_dir, "scss", filename))
 
+    def create_package_json(self) -> None:
+        """Creatinge nodejs package.json file"""
+        package_json_filename = os.path.join(
+            self.theme_dir, "js", "package.json")
+
+        with open(package_json_filename, "w") as package_json:
+            site_name = self.settings['SITENAME']
+            contents = {
+                "name": site_name,
+                "version": f"{datetime.date.today():%Y%m%d}.0.0",
+                "description": f"Javascripts of {site_name}",
+                "private": True,
+                "dependencies": {
+                    # "google-closure-compiler": "20190301.0.0",
+                    "jquery": "^3.4.1",
+                    "popper.js": "^1.15.0",
+                    "bootstrap": "^" + self.settings['BOOTSTRAP_VERSION'],
+                },
+                "devDependencies": {},
+                "author": self.settings["AUTHOR"],
+                "license": "Rights reserved"
+            }
+
+            json.dump(contents, package_json, indent=2)
+
     def create_gitignore(self) -> None:
         with open(os.path.join(self.base_dir, ".gitignore"), "a") as gitignore:
             gitignore.write(
@@ -117,6 +144,7 @@ def main():
     step(website.install_theme)
     step(website.install_bootstrap,
          details=website.settings["BOOTSTRAP_VERSION"])
+    step(website.create_package_json)
     step(website.create_gitignore)
 
     print("Done, homefront project structure created")
