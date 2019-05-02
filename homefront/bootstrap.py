@@ -6,22 +6,19 @@ import os
 import homefront
 import homefront.release
 
-_GITHUB_BOOTSTRAP_REPO = "twbs/bootstrap"
 
-_ARCHIVE_DIRECTORIES_TO_EXTRACT = {
-    "*bootstrap-*/scss/": "scss/bootstrap",
-    "*bootstrap-*/js/src/": "js/bootstrap",
-}
-
-
-class Release(homefront.release.GithubRelease):
+class Release(homefront.release.NpmRelease):
     """
-    Represents a release to fetch from github.
+    Represents a release to fetch.
     """
     def __init__(self, required_version: str,
                  destination: Union[str, os.PathLike]):
-        super().__init__(required_version, _GITHUB_BOOTSTRAP_REPO, destination,
-                         _ARCHIVE_DIRECTORIES_TO_EXTRACT)
+        super().__init__(
+            required_version, "bootstrap", destination,
+            # scss files are under a bootstrap directory, so they can be
+            # included with "bootstrap/thelib".
+            {"package/scss/": "scss/bootstrap"}
+        )
         self.name = "Bootstrap"
 
 
