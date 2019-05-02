@@ -126,13 +126,20 @@ class Release:
                 destination: Union[str, os.PathLike]) -> None:
         raise NotImplementedError
 
-    def install(self) -> None:
-        with tempfile.TemporaryDirectory() as tmpdir:
-            with tempfile.NamedTemporaryFile() as archive:
-                self.fetch(archive)
-                archive.seek(0)
+    def _download_and_extract(self, destination: str) -> None:
+        with tempfile.NamedTemporaryFile() as archive:
+            self.fetch(archive)
+            archive.seek(0)
 
-                self.extract(archive, tmpdir)
+            self.extract(archive, destination)
+
+    def install(self) -> None:
+        if not self.to_extract:
+            self._download_and_extract(self.destination)
+            return
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            self._download_and_extract(tmpdir)
 
             for pattern, target in self.to_extract.items():
                 matches = glob.glob(os.path.join(tmpdir, pattern))
@@ -149,7 +156,7 @@ class Release:
                     else:
                         dest = target
 
-                    dest = os.path.join(self.destination, target)
+                    dest = os.path.join(self.destination, dest)
 
                     LOG.debug("installing %s to %s", src, dest)
 
