@@ -1,5 +1,5 @@
 # coding: utf-8
-from typing import Type
+from typing import Optional, Type, Union
 
 import glob
 import logging
@@ -33,42 +33,42 @@ class BootstrapPlugin:
         return cls._instance
 
     def __init__(self):
-        self.pelican = None
-        self.enabled = False
-        self.bootstrap_path = None
+        self.pelican: pelican.Pelican = None
+        self.enabled: bool = False
+        self.bootstrap_path: Optional[Union[str, os.PathLike]] = None
 
         self.enable()
 
     @property
-    def bootstrap_sass_path(self):
+    def bootstrap_scss_path(self):
         return os.path.join(self.bootstrap_path, "scss")
 
     def enable(self) -> None:
         pelican.signals.initialized.connect(self.initialize)
         pelican.signals.get_generators.connect(self.get_generator)
 
-        self.update_include_path()
+        self.update_scss_include_path()
 
         self.enabled = True
 
     def disable(self) -> None:
         self.enabled = False
 
-        self.update_include_path(enable=False)
+        self.update_scss_include_path(enable=False)
 
         pelican.signals.get_generators.disconnect(self.get_generator)
         pelican.signals.get_generators.disconnect(self.initialize)
 
-    def update_include_path(self, enable: bool = True) -> None:
+    def update_scss_include_path(self, enable: bool = True) -> None:
         if not self.bootstrap_path:
             return
 
         if enable:
             include_path = homefront.pelican.sass.SassGenerator.include_path
-            include_path.append(self.bootstrap_sass_path)
+            include_path.append(self.bootstrap_scss_path)
         else:
             include_path = homefront.pelican.sass.SassGenerator.include_path
-            include_path.remove(self.bootstrap_sass_path)
+            include_path.remove(self.bootstrap_scss_path)
 
     def initialize(self, pelican_object: pelican.Pelican) -> None:
         self.pelican = pelican_object
@@ -82,7 +82,7 @@ class BootstrapPlugin:
             LOG.debug("Bootstrap found at %s", self.bootstrap_path)
 
             LOG.info("Enabling bootstrap %s", settings["BOOTSTRAP_VERSION"])
-            self.update_include_path()
+            self.update_scss_include_path()
         except (homefront.Error, OSError):
             LOG.exception("Failed to initialize bootstrap, plugin deactivated")
             self.disable()
@@ -117,7 +117,7 @@ class BootstrapPlugin:
                     version, candidate_version):
                 return candidate
 
-        # Could'nt find suitable version of bootstrap, let's install it
+        # Couldn't find suitable version of bootstrap, let's install it
         homefront.bootstrap.download(version, bootstrap_path)
         return bootstrap_path
 
