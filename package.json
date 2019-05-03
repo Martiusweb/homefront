@@ -2,6 +2,7 @@
   "name": "homefront",
   "version": "1.0.0",
   "description": "Boilerplate for a static website, with kilograms of js deps",
+  "private": true,
   "scripts": {
     "preinstall": "if [ ! -d venv ] ; then python -m venv venv && . venv/bin/activate && python setup.py develop; fi",
     "install": ". venv/bin/activate && pelican -v",
