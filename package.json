@@ -1,0 +1,24 @@
+{
+  "name": "homefront",
+  "version": "1.0.0",
+  "description": "Boilerplate for a static website, with kilograms of js deps",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Martiusweb/homefront.git"
+  },
+  "keywords": [],
+  "author": "Martin Richard",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/Martiusweb/homefront/issues"
+  },
+  "homepage": "https://github.com/Martiusweb/homefront#readme",
+  "dependencies": {
+    "bootstrap": "^4.3.1",
+    "jquery": "^3.4.1",
+    "popper.js": "^1.15.0"
+  }
+}
