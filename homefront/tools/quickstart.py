@@ -156,8 +156,9 @@ def main():
     step(website.install_theme)
     step(website.install_bootstrap,
          details=website.settings["BOOTSTRAP_VERSION"])
-    step(website.create_package_json)
-    step(website.install_npm_dependencies)
+    # Let's ignore all these javascript things for now
+    # step(website.create_package_json)
+    # step(website.install_npm_dependencies)
     step(website.create_gitignore)
 
     print("Done, homefront project structure created")
