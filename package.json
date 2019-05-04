@@ -5,16 +5,16 @@
   "private": true,
   "scripts": {
     "preinstall": "if [ ! -d venv ] ; then python -m venv venv && . venv/bin/activate && python setup.py develop; fi",
-    "install": "npm run-script css && npm run-script html",
+    "install": "npm run-script css && npm run-script js && npm run-script html",
     "test": "echo \"Error: no test specified\" && exit 1",
-
     "html": "npm run-script html-build",
     "html-build": ". venv/bin/activate && pelican -v",
-
     "css": "npm run-script css-compile && npm run-script css-prefix && npm run-script css-minify",
     "css-compile": "node-sass --importer node_modules/node-sass-package-importer/dist/cli.js --output-style expanded --source-map true --source-map-contents true --precision 6 theme/default/scss/styles.scss output/theme/css/styles.css",
     "css-prefix": "postcss --config postcss.config.js --replace \"output/theme/css/*.css\" \"!output/theme/css/*.min.css\"",
-    "css-minify": "cleancss --level 1 --format breakWith=lf --source-map --source-map-inline-sources --output output/theme/css/styles.min.css output/theme/css/styles.css"
+    "css-minify": "cleancss --level 1 --format breakWith=lf --source-map --source-map-inline-sources --output output/theme/css/styles.min.css output/theme/css/styles.css",
+    "js": "npm run-script js-compile",
+    "js-compile": "rollup --config rollup.config.js --sourcemap"
   },
   "repository": {
     "type": "git",
@@ -38,6 +38,8 @@
     "node-sass": "^4.12.0",
     "node-sass-package-importer": "^5.3.1",
     "postcss": "^7.0.15",
-    "postcss-cli": "^6.1.2"
+    "postcss-cli": "^6.1.2",
+    "rollup": "^1.11.2",
+    "rollup-plugin-node-resolve": "^4.2.3"
   }
 }
