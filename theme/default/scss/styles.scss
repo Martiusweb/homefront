@@ -1,7 +1,10 @@
 /*! Based on Boostrap, MIT Licensed, (c) their authors */
 
 @import "~bootstrap/scss/functions";
+// Bootstrap variables are set to "!default", which means they will not
+// override ours if they are defined first.
 @import "variables";
+@import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/mixins";
 @import "~bootstrap/scss/root";
 @import "~bootstrap/scss/reboot";
@@ -38,3 +41,6 @@
 // @import "~bootstrap/scss/spinners";
 // @import "~bootstrap/scss/utilities";
 // @import "~bootstrap/scss/print";
+
+
+@import "theme";
