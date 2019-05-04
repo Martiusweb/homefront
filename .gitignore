@@ -1,5 +1,7 @@
 venv/
+output/
 *.egg-info
 __pycache__
 *.py[oc]
 node_modules
+
