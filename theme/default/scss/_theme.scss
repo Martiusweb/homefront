@@ -29,7 +29,9 @@ $saint-petersberg: linear-gradient(45deg, #f5f7fa, #c3cfe2);
 
 /* Base layout */
 body > header {
-    @extend .pt-5;
+    @include media-breakpoint-up(lg) {
+        @extend .pt-lg-5;
+    }
     text-align: center;
 }
 
@@ -71,43 +73,64 @@ body {
 }
 
 body > footer {
-    @extend .container-fluid, .py-5;
+    @extend .container-fluid, .p-3;
 
     > div {
-        @include make-row();
         @extend .justify-content-center;
     }
+}
 
-    section {
-        @include make-col-ready();
-        @include make-col(4);
+@include media-breakpoint-up(lg) {
+    body > footer {
+        @extend .py-lg-5;
+
+        > div {
+            @include make-row();
+        }
+
+        section {
+            @include make-col-ready();
+            @include make-col(4);
+        }
     }
 }
 
 body > main {
-    @extend .container, .py-5;
+    @extend .container, .py-3;
+
+    @include media-breakpoint-up(lg) {
+        @extend .py-lg-5;
+    }
 
     img {
         @extend .my-3;
         max-width: 100%;
     }
 
-    /* Large spacings around titles */
-    h1 { @extend .my-5; }
-    h2 { @extend .my-4; }
-    h3 { @extend .my-3; }
+    h1 { @extend .my-lg-4; }
+    h2 { @extend .my-lg-3; }
+    h3 { @extend .my-lg-2; }
 
     @include media-breakpoint-up(lg) {
+        /* Large spacings around titles */
+        h1 { @extend .my-lg-5; }
+        h2 { @extend .my-lg-4; }
+        h3 { @extend .my-lg-3; }
+
         > article, > section {
             /* larger screens get their content with large x margins */
-            /* TODO: responsive! */
             margin-left: 10%;
             margin-right: 10%;
         }
     }
 
     aside {
-        @extend .my-5;
+        @extend .my-3;
+
+        @include media-breakpoint-up(lg) {
+            @extend .my-lg-5;
+        }
+
         text-align: center;
     }
 }
@@ -128,6 +151,11 @@ body > header {
     h1 {
         font-size: $h1-font-size * 1.5;
         a { color: $gray-600; }
+
+        @include media-breakpoint-down(md) {
+            line-height: $h1-font-size * 1.5;
+        }
+
     }
 
 }
@@ -252,7 +280,11 @@ h1 span.cat {
 
 main {
     img {
-        @extend .rounded, .m-2;
+        @extend .rounded, .my-2;
+
+        @include media-breakpoint-up(lg) {
+            @extend .m-lg-2;
+        }
     }
 
     img.align-left {
