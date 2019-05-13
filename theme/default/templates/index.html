@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block body_class %}home{% endblock %}"
+{% block content %}
+{% block content_prelude %}{% endblock %}
+<section>
+{% block content_title %}
+<h1>All articles</h1>
+{% endblock %}
+
+<ol id="post-list">
+{% for article in articles_page.object_list %}
+<li><article>
+    <p>⏱ <time class="published" datetime="{{ article.date.isoformat() }}"> {{ article.locale_date }}</time>: <a href="{{ SITEURL }}/{{ article.url }}" rel="bookmark" title="Permalink to {{ article.title|striptags }}">{{ article.title }}</a></p>
+    <div class="summary">{{ article.summary }}</div>
+</article></li>
+{% endfor %}
+</ol>
+{% if articles_page.has_other_pages() %}
+    {% include 'pagination.html' %}
+{% endif %}
+</section>
+{% endblock content %}

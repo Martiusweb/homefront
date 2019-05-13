@@ -1,1 +1,13 @@
-// Customized boostrap variables (and our own, if we want)
+// Customized boostrap variables (and our own, if we want)t
+
+@import url('https://fonts.googleapis.com/css?family=Playfair+Display|Lato');
+
+// Fonts
+$font-family-serif:           'Playfair Display', serif;
+$font-family-sans-serif:      Lato, "Helvetica Neue", Arial, "Noto Sans", sans-serif !default;
+$font-family-monospace:       SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
+
+
+// Colors
+$link-color: #1E37E6; /* #FF544B; */
+$link-bg-color: #74FFCF;  /* a very flashy green/blue */

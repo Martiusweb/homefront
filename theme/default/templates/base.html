@@ -5,6 +5,7 @@
   <title>{% block title %}{{ SITENAME }}{% endblock title %}</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <base href="/">
   <link type="text/css" rel="stylesheet" href="theme/css/styles.css">
   <script type="text/javascript" src="theme/js/main.js"></script>
   {% if FEED_ALL_ATOM %}
@@ -34,32 +35,52 @@
   {% endblock head %}
 </head>
 
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="{{ SITEURL }}/">{{ SITENAME }} <strong>{{ SITESUBTITLE }}</strong></a></h1>
-        </header><!-- /#banner -->
-        <nav id="menu"><ul>
-        {% for title, link in MENUITEMS %}
-            <li><a href="{{ link }}">{{ title }}</a></li>
-        {% endfor %}
-        {% if DISPLAY_PAGES_ON_MENU %}
-          {% for p in pages %}
-            <li{% if p == page %} class="active"{% endif %}><a href="{{ SITEURL }}/{{ p.url }}">{{ p.title }}</a></li>
-          {% endfor %}
+<body class="{% block body_class %}default{% endblock %}">
+    <header>
+        <h1><a href="{{ SITEURL }}/">{{ SITENAME }}</a></h1>
+    </header>
+
+    <div><nav><ul>
+    {% for title, link in MENUITEMS %}
+        <li><a href="{{ link }}">{{ title }}</a></li>
+    {% endfor %}
+    {% if DISPLAY_CATEGORIES_ON_MENU %}
+      {% for cat in categories|map("first") %}
+        <li{% if cat == category %} class="active"{% endif %}><a href="{{ SITEURL }}/{{ cat.url }}">{{ cat }}</a></li>
+      {% endfor %}
+    {% endif %}
+    {% if DISPLAY_PAGES_ON_MENU %}
+      {% for p in pages if p.category not in categories|map("first") %}
+        {% if p.category not in categories %}
+        <li{% if p == page %} class="active"{% endif %}><a href="{{ SITEURL }}/{{ p.url }}">{{ p.title }}</a></li>
         {% endif %}
-        {% if DISPLAY_CATEGORIES_ON_MENU %}
-          {% for cat, null in categories %}
-            <li{% if cat == category %} class="active"{% endif %}><a href="{{ SITEURL }}/{{ cat.url }}">{{ cat }}</a></li>
-          {% endfor %}
-        {% endif %}
-        </ul></nav><!-- /#menu -->
-        {% block content %}
-        {% endblock %}
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>,
-                which takes great advantage of <a href="http://python.org">Python</a>.
-                </address><!-- /#about -->
-        </footer><!-- /#contentinfo -->
+      {% endfor %}
+    {% endif %}
+    </ul></nav></div>
+
+    <main>
+    {% block content %}
+    {% endblock %}
+    </main>
+
+    <footer>
+      <div>
+        <section>
+            <p>This is the webpage of Martin Richard (generated on {{ NOW.strftime("%B %d, %Y") }}).</p>
+            <p>My nickname is <em>Martius</em>, and often <em>Martiusweb</em>
+            online.</p>
+        </section>
+        <section>
+            <p>The source of this website is available online
+            <a href="https://github.com/Martiusweb/martiusweb">on Github</a>.</p>
+            <p>🧐 Code is under license GNU/GPLv2 and the content is under CC BY-NC-SA.</p>
+            <p>Photos by Paul Adenot (🧔), Louise Crépet (💑) and myself.</p>
+            <p>Built with <a href="http://getpelican.com/">Pelican</a>,
+               <a href="https://getbootstrap.com/">Bootstrap</a>, megabytes of
+               Javascript and a lot of other open-source pieces. Hosted by
+               <a href="https://www.alwaysdata.com/">Alwaysdata</a>.</p>
+        </section>
+      </div>
+    </footer>
 </body>
 </html>

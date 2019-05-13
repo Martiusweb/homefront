@@ -1,12 +1,28 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*- #
-from __future__ import unicode_literals
+# coding: utf-8
+import datetime
+import os
 
 AUTHOR = 'Martin Richard'
 SITENAME = 'Martin Richard'
+SITESUBTITLE = "Hello, I'm Martin, and this is my webpage."
 SITEURL = ''
 
+MENUITEMS = (
+    # Put this page first (it's "hidden" and must appear before categories in
+    # the menu)
+    ("About me", "aboutme.html"),
+)
+
 PATH = 'content'
+STATIC_PATHS = ("images", )
+
+# We want "pages" to be in the root directory
+PAGE_URL = "{slug}.html"
+PAGE_SAVE_AS = "{slug}.html"
+
+# Customize the scheme of urls for articles to match existing articles
+ARTICLE_URL = 'w/{date:%Y}-{date:%m}-{date:%d}-{slug}.html'
+ARTICLE_SAVE_AS = 'w/{date:%Y}-{date:%m}-{date:%d}-{slug}.html'
 
 TIMEZONE = 'Europe/Paris'
 
@@ -35,3 +51,5 @@ DEFAULT_PAGINATION = 10
 #RELATIVE_URLS = True
 
 THEME = "theme/default"
+
+NOW = datetime.datetime.now()

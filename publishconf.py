@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*- #
-from __future__ import unicode_literals
+# coding: utf-8
 
 # This file is only used if you use `make publish` or
 # explicitly specify it as your config file.
@@ -8,7 +7,9 @@ from __future__ import unicode_literals
 import os
 import sys
 sys.path.append(os.curdir)
-from pelicanconf import *
+from pelicanconf import *  # noqa
+
+# This overrides default settings
 
 # If your site is available via HTTPS, make sure SITEURL begins with https://
 SITEURL = 'https://www.martiusweb.net'

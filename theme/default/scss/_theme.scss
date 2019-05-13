@@ -1,1 +1,266 @@
 /* Our set of customizations */
+
+/* colors */
+/* ideas: */
+/* yellow: #FFF64A */
+/* blue: #b8f6fe; */
+/* red: #FF544B; + beige #e8e6e2 */
+
+/* gradients
+ * see: https://digitalsynopsis.com/design/beautiful-color-ui-gradients-backgrounds/
+ */
+$roseanna: linear-gradient(to right, #ffafbd, #ffc3a0);
+$lush: linear-gradient(to right,  #56ab2f, #a8e063);
+$relay: linear-gradient(to right, #3a1c71, #d76d77, #ffaf7b);
+$sweet-morning: linear-gradient(to right, #ff5f6d, #ffc371);
+
+$peach: linear-gradient(45deg, #ffedbc, #ed4264);
+$sea-blue: linear-gradient(45deg, #2b5876, #4e4376);
+$celestial: linear-gradient(to bottom, #c33764, #1d2671);
+$heavy-rain: linear-gradient(to bottom, #cfd9df, #e2ebf0);
+$winter-neva: linear-gradient(to bottom, #a1c4fd, #c2e9fb);
+$saint-petersberg: linear-gradient(45deg, #f5f7fa, #c3cfe2);
+
+@mixin text-gradient-clip() {
+    background-clip: text;
+    color: transparent;
+    a { color: transparent; }
+}
+
+/* Base layout */
+body > header {
+    @extend .pt-5;
+    text-align: center;
+}
+
+body > div {
+    @extend .container-fluid;
+    position: sticky;
+    top: 0;
+    background: white;
+
+    nav {
+        @include make-container;
+    }
+
+    /* nav position */
+    ul {
+        @extend .nav, .justify-content-center;
+    }
+    ul li { @extend .nav-item; }
+    ul li a { @extend .nav-link; }
+
+}
+
+
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+
+    > main {
+        flex: 1 0 auto;
+    }
+
+    > footer {
+        flex-shrink: 0;
+    }
+}
+
+body > footer {
+    @extend .container-fluid, .py-5;
+
+    > div {
+        @include make-row();
+        @extend .justify-content-center;
+    }
+
+    section {
+        @include make-col-ready();
+        @include make-col(4);
+    }
+}
+
+body > main {
+    @extend .container, .py-5;
+
+    img {
+        @extend .my-3;
+        max-width: 100%;
+    }
+
+    /* Large spacings around titles */
+    h1 { @extend .my-5; }
+    h2 { @extend .my-4; }
+    h3 { @extend .my-3; }
+
+    @include media-breakpoint-up(lg) {
+        > article, > section {
+            /* larger screens get their content with large x margins */
+            /* TODO: responsive! */
+            margin-left: 10%;
+            margin-right: 10%;
+        }
+    }
+
+    aside {
+        @extend .my-5;
+        text-align: center;
+    }
+}
+
+
+/* Typography */
+h1, h2, h3, h4, h4, h6 {
+    font-family: $font-family-serif;
+}
+
+/* Design */
+
+a:hover {
+    background-image: linear-gradient(to bottom, transparent 25%, $link-bg-color 25%, $link-bg-color 75%, transparent 75%);
+}
+
+body > header {
+    h1 {
+        font-size: $h1-font-size * 1.5;
+        a { color: $gray-600; }
+    }
+
+}
+
+body > div > nav {
+    font-size: $font-size-lg;
+
+    /* background-image: linear-gradient(to right, #fdfc47, #24fe41); */
+    @include text-gradient-clip();
+    display: inline-block;  /* make it take as little width as possible */
+    background-image: $roseanna;
+
+    ul li a:hover {
+        background-image: linear-gradient(to bottom, transparent 35%, $link-bg-color 35%, $link-bg-color 65%, transparent 65%);
+    }
+}
+
+body > main {
+    /* title gradients */
+    h1, h2, h3 {
+        @include text-gradient-clip();
+        display: inline-block;
+    }
+
+    h1 { background-image: $sweet-morning; }
+    h2 { background-image: $lush; }
+    h3 { background-image: $relay; }
+
+    strong {
+        @include text-gradient-clip();
+        background-image: $celestial;
+    }
+
+    aside, aside a {
+        color: $gray-600;
+    }
+}
+
+body > footer {
+    font-size: $font-size-sm;
+
+    background: #FFFC94;
+    color: $gray-600;
+
+    a {
+        color: $gray-600;
+        text-decoration: underline;
+    }
+
+}
+
+/* Text and content styles */
+/* obfuscate things like email address against bots */
+.ob {
+    font-family: $font-family-monospace;
+    direction: rtl;
+    unicode-bidi: bidi-override;
+}
+
+
+code {
+    background-image: $saint-petersberg;
+    border-radius: 3px;
+    padding: 3px;
+}
+
+tt {
+    @extend code;
+}
+
+div.admonition {
+    @extend .my-4, .px-3, .pb-2;
+    p.admonition-title {
+        @extend .p-2;
+
+        font-size: $font-size-lg;
+        font-weight: bold;
+        text-align: center;
+        font-family: $font-family-serif;
+
+        @include text-gradient-clip();
+        background-image: $celestial;
+    }
+}
+
+div.admonition:not(.admonition-acknowledgement) {
+    background: #F4F9ED;
+    border-radius: 15px;
+    box-shadow: 0 1px 3px $gray-200;
+}
+
+div.admonition-acknowledgement {
+    p.admonition-title {
+        background-image: $winter-neva;
+    }
+
+    color: $gray-600;
+    font-size: $font-size-sm;
+    background: none;
+}
+
+h1 span.cat {
+    text-transform: lowercase;
+}
+
+#post-list {
+    list-style: none;
+    padding: 0;
+
+    .summary {
+        padding-left: 1.5em;
+        font-size: $font-size-sm;
+    }
+}
+
+main {
+    img {
+        @extend .rounded, .m-2;
+    }
+
+    img.align-left {
+        @extend .d-block, .float-left;
+    }
+    img.align-right {
+        @extend .d-block, .float-right;
+    }
+
+    img.align-center {
+        @extend .d-block, .mx-auto;
+    }
+}
+
+.paginator {
+    @extend .my-4;
+    text-align: center;
+}

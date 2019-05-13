@@ -1,0 +1,23 @@
+{% extends "index.html" %}
+{% block title %}{{ SITENAME }} - {{ category }} category{% endblock %}
+{% block body_class %}category{% endblock %}"
+
+{% block content_prelude %}
+{% for page in pages %}
+    {% if page.category == category %}
+    {% if page.main_illustration %}
+    <img src="{{ page.main_illustration }}" alt="{{ page.main_illustration|default("Article illutration") }}">
+    {% endif %}
+    <section>
+        <h1>{{ page.title }}</h1>
+        {% if articles_page.number == 1 %}
+        {{ page.content }}
+        {% endif %}
+    </section>
+    {% endif %}
+{% endfor %}
+{% endblock %}
+
+{% block content_title %}
+<h2>Articles about <span class="cat">{{ category }}</span></h2>
+{% endblock %}
