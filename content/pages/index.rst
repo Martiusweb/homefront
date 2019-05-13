@@ -38,7 +38,8 @@ which simplifies testing of code based on asyncio.
 In the `code <code.html>`_ section, you can find a sample of my personal work,
 articles I've written and talks I gave.
 
-I in read/write mode on:
+I'm in read/write mode on:
+
   * Github: `Martiusweb <https://github.com/Martiusweb>`__,
   * Hacker News: `martius <http://news.ycombinator.com/user?id=martius>`__,
   * Stack Overflow: `Martin Richard <https://stackoverflow.com/users/572821/martin-richard>`__.
