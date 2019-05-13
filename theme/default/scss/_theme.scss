@@ -92,6 +92,10 @@ body > footer {
             @include make-col-ready();
             @include make-col(4);
         }
+        marquee {
+            @include make-col-ready();
+            @include make-col(8);
+        }
     }
 }
 
@@ -139,6 +143,12 @@ body > main {
 /* Typography */
 h1, h2, h3, h4, h4, h6 {
     font-family: $font-family-serif;
+}
+h1 {
+    font-size: 3rem;
+}
+h2 {
+    font-size: 2rem;
 }
 
 /* Design */
@@ -197,12 +207,17 @@ body > main {
 body > footer {
     font-size: $font-size-sm;
 
-    background: #FFFC94;
-    color: $gray-600;
+    background: $gray-600;
+    color: $link-bg-color;
+    /* background: #FFFC94; color: $gray-600; */
 
     a {
-        color: $gray-600;
+        color: $link-bg-color;
         text-decoration: underline;
+    }
+    a:hover {
+        color: red;
+        background: none;
     }
 
 }
