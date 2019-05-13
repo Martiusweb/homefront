@@ -1,0 +1,26 @@
+Un serveur fiable avec python 3.4
+=================================
+
+:slug: pyconfr-2014
+:date: 25/10/2014
+:lang: fr
+:tags: Talk, t
+:talk: PyConFr 2014
+:slides: /t/pyconfr-2014/
+
+.. |nbsp| unicode:: 0xA0
+   :trim:
+
+Cette présentation est un retour d'expérience sur la conception et le
+développement d'un serveur basé sur asyncio et exploitant d'autres
+fonctionnalités de Python très pratiques.
+
+Je présenterai une architecture en couches qui permet d'implémenter facilement
+un serveur capable de gérer de nombreuses connexions simultanées rapidement et
+efficacement. On verra plus en détail comment rendre l'ensemble scalable: où et
+comment optimiser son code, gérer efficacement la mémoire et se protéger contre
+les utilisateurs malveillants ou les attaques DOS (Deny of Service).
+
+Python offre de nombreuses fonctionnalités très pratiques pour écrire un
+serveur, et on verra qu'il n'est pas toujours nécessaire d'écrire du code bas
+niveau pour être performant |nbsp| !

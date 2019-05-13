@@ -1,7 +1,7 @@
 Misc
 ====
 
-:category: misc
+:category: Misc
 :main_illustration: images/misc.page.jpg
 :main_illustration_alt: Bikes in Zurich
 

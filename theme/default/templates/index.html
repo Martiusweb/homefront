@@ -1,13 +1,13 @@
 {% extends "base.html" %}
-{% block body_class %}home{% endblock %}"
+{% block body_class %}all-posts{% endblock %}"
 {% block content %}
 {% block content_prelude %}{% endblock %}
 <section>
 {% block content_title %}
-<h1>All articles</h1>
+<h1>All publications</h1>
 {% endblock %}
 
-<ol id="post-list">
+<ol class="post-list">
 {% for article in articles_page.object_list %}
 <li><article>
     <p>⏱ <time class="published" datetime="{{ article.date.isoformat() }}"> {{ article.locale_date }}</time>: <a href="{{ SITEURL }}/{{ article.url }}" rel="bookmark" title="Permalink to {{ article.title|striptags }}">{{ article.title }}</a></p>

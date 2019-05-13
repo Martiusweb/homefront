@@ -1,0 +1,6 @@
+[submodule "content/t"]
+	path = content/t
+	url = https://github.com/Martiusweb/talks.git
+[submodule "output/t"]
+	path = output/t
+	url = https://github.com/Martiusweb/talks.git

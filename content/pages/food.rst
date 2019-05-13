@@ -1,7 +1,7 @@
 Food
 ====
 
-:category: food
+:category: Food
 :main_illustration: images/food.page.jpg
 :main_illustration_alt: Homemade bread
 

@@ -45,7 +45,7 @@
         <li><a href="{{ link }}">{{ title }}</a></li>
     {% endfor %}
     {% if DISPLAY_CATEGORIES_ON_MENU %}
-      {% for cat in categories|map("first") %}
+      {% for cat in categories|map("first")|reject("equalto", "hidden") %}
         <li{% if cat == category %} class="active"{% endif %}><a href="{{ SITEURL }}/{{ cat.url }}">{{ cat }}</a></li>
       {% endfor %}
     {% endif %}

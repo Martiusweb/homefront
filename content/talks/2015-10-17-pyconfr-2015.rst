@@ -1,0 +1,32 @@
+Votre appli web et Python: de zéro au million d'utilisateurs
+============================================================
+
+:slug: pyconfr-2015
+:date: 17/10/2015
+:lang: fr
+:tags: Talk, t
+:talk: PyConFr 2015
+:slides: /t/pyconfr-2015/
+:video: https://pyvideo.org/pycon-fr-2015/votre-appli-web-et-python-de-zero-au-million-dutilisateurs.html
+
+.. |nbsp| unicode:: 0xA0
+   :trim:
+
+Vous avez lu tout un tas d'articles sur les microservices avec Django, du
+NoSQL, déployés avec Chef sur un cluster openstack. Maintenant, vous avez une
+idée de comment gérer un million d'utilisateurs, un bon mal de tête, et
+toujours aucune idée de comment commencer.
+
+Votre objectif, c’est de développer une application qui fonctionne bien : c’est
+à dire avec peu de bugs (visibles), de bonnes performances et une bonne
+disponibilité. Sans cette base stable, la dette technique finira pas devenir un
+frein à votre réussite.
+
+On verra déjà comment, dès le début du projet, on peut anticiper sur des
+problèmes futurs grâce à quelques décisions et bonnes pratiques. Puis on
+s’intéressera à la vie de l’application une fois en production : comment
+assurer sa stabilité et l’ajout de fonctionnalités et comment s’en sortir en
+cas de panne. Enfin, on verra quelques techniques qui nous permettront de
+progressivement accueillir de nouveaux utilisateurs.
+
+Python et son écosystème seront mis à contribution à chaque étape |nbsp| !

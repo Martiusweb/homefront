@@ -22,10 +22,3 @@ I gave two talks about asynctest:
 * `FOSDEM 2017 <https://archive.fosdem.org/2017/schedule/event/python_asynctest/>`_
   (available on `YouTube <https://www.youtube.com/watch?v=Lt9fattEiJ0>`__),
 * `Pycon FR 2016 (on YouTube) <https://www.youtube.com/watch?v=LdEwixkPhUs>`_.
-
-Talks
------
-
-I sometimes give talks:
-
-* `TODO <https://marti.us/t/>`_

@@ -1,0 +1,15 @@
+{% extends "index.html" %}
+
+{% block title %}
+{% if tag == "t" %}Talks{% elif tag == "w" %}Writings{% else %}{{ tag }}{% endif %}
+ - {{ SITENAME }}{% endblock %}
+
+{% block content_title %}
+{% if tag == "t" %}
+<h1>Talks</h1>
+{% elif tag == "w" %}
+<h1>Writings</h1>
+{% else %}
+<h1>Articles tagged with {{ tag }}</h1>
+{% endif %}
+{% endblock %}

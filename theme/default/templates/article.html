@@ -46,15 +46,19 @@
         {% endfor %}
     {% endif %}
     {% if article.tags %}
-    <div class="tags">
-        Tags:
-        {% for tag in article.tags %}
-            <a href="{{ SITEURL }}/{{ tag.url }}">{{ tag }}</a>
-        {% endfor %}
-    </div>
+    {% for tag in article.tags|reject("in", ("t", "w")) %}
+        🏷️ <a href="{{ SITEURL }}/{{ tag.url }}">{{ tag }}</a>
+    {% endfor %}
     {% endif %}
   </aside>
 
   {{ article.content }}
+
+  {% if article.slides or article.video %}
+  <aside>
+    {% if article.slides %} 📁 <a href="{{article.slides}}">Slides</a> {% endif %}
+    {% if article.video %} 🎞  <a href="{{article.video}}">Video</a> {% endif %}
+  </aside>
+  {% endif %}
 </article>
 {% endblock %}

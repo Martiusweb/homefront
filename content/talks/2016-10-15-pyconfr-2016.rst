@@ -1,0 +1,24 @@
+asynctest: easier unit testing for asyncio
+==========================================
+
+:slug: pyconfr-2016
+:date: 15/10/2016
+:tags: Talk, t
+:talk: PyConFr 2016
+:slides: /t/pyconfr-2016/
+:video: https://www.pycon.fr/2016/videos/asynctest-testez-plus-facilement-votre-code-asyncio.html
+
+asynctest is a library which adds features for asyncio to the unittest module,
+shipped with Python.
+
+This talk aims at present asynctest and discuss techniques to write unit tests.
+We will talk about testing from zero: how to write and run test cases,
+structure them (files, classes, methods) in a source repository.
+
+We will also see a few interresting and often overlooked features of unittest.
+Then, we will discover how asynctest can help to write tests for asyncio:
+mocking of coroutines, simulating the loop and its clock.
+
+Developers which are not familiar with asyncio are welcome: most of the advices
+and techniques shown work with the unittest module.
+

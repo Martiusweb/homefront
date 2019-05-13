@@ -1,0 +1,27 @@
+asynctest: easier unit testing for asyncio
+==========================================
+
+:slug: fosdem-2017
+:date: 05/02/2017
+:tags: Talk, t
+:talk: FOSDEM 2017
+:slides: /t/fosdem-2017/
+:video: https://www.youtube.com/watch?v=Lt9fattEiJ0
+
+asynctest enhances the standard python package unittest with features for
+asyncio. This talk aims at presenting asynctest and discuss various practices
+around unit testing of code using asyncio.
+
+This talk aims at presenting asynctest, a library written on top of the
+standard unittest module. asynctest provides features for writing tests for
+libraries and programs using asyncio.
+
+We will discover handy features like:
+
+  * how ``asynctest.TestCase`` reduces boilerplate and offers safeguards around
+    subtle mistakes in an asynchronous code,
+  * how ``asynctest.Mock`` objects helps to mock coroutines, and how patch
+    decorators are enhanced to handle coroutines,
+  * how one can control the event loop's clock.
+
+I will also discuss the future of asynctest and planned features.

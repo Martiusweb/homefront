@@ -233,13 +233,20 @@ h1 span.cat {
     text-transform: lowercase;
 }
 
-#post-list {
+.post-list {
     list-style: none;
     padding: 0;
 
+    p {
+        @extend .mb-2;
+    }
+
     .summary {
-        padding-left: 1.5em;
         font-size: $font-size-sm;
+    }
+    div.summary {
+        @extend .mb-2;
+        padding-left: 1.5em;
     }
 }
 

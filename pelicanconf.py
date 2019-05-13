@@ -14,15 +14,29 @@ MENUITEMS = (
 )
 
 PATH = 'content'
-STATIC_PATHS = ("images", )
+STATIC_PATHS = ("images",)
 
 # We want "pages" to be in the root directory
 PAGE_URL = "{slug}.html"
 PAGE_SAVE_AS = "{slug}.html"
 
 # Customize the scheme of urls for articles to match existing articles
+INDEX_SAVE_AS = 'w/index.html'
 ARTICLE_URL = 'w/{date:%Y}-{date:%m}-{date:%d}-{slug}.html'
 ARTICLE_SAVE_AS = 'w/{date:%Y}-{date:%m}-{date:%d}-{slug}.html'
+
+ARTICLE_LANG_URL = 'w/{date:%Y}-{date:%m}-{date:%d}-{slug}-{lang}.html'
+ARTICLE_LANG_SAVE_AS = 'w/{date:%Y}-{date:%m}-{date:%d}-{slug}-{lang}.html'
+
+DEFAULT_CATEGORY = "hidden"
+CATEGORY_URL = "{slug}/"
+CATEGORY_SAVE_AS = "{slug}/index.html"
+# This allows us to write /(t|w)/index.html
+TAG_URL = "{slug}/"
+TAG_SAVE_AS = "{slug}/index.html"
+
+# Because of talks
+USE_FOLDER_AS_CATEGORY = False
 
 TIMEZONE = 'Europe/Paris'
 
@@ -53,3 +67,7 @@ DEFAULT_PAGINATION = 10
 THEME = "theme/default"
 
 NOW = datetime.datetime.now()
+DATE_FORMATS = {
+    'fr': '%d %b %Y',
+    'en': '%d %b %Y',
+}
