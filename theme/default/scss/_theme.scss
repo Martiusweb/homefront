@@ -1,26 +1,5 @@
 /* Our set of customizations */
 
-/* colors */
-/* ideas: */
-/* yellow: #FFF64A */
-/* blue: #b8f6fe; */
-/* red: #FF544B; + beige #e8e6e2 */
-
-/* gradients
- * see: https://digitalsynopsis.com/design/beautiful-color-ui-gradients-backgrounds/
- */
-$roseanna: linear-gradient(to right, #ffafbd, #ffc3a0);
-$lush: linear-gradient(to right,  #56ab2f, #a8e063);
-$relay: linear-gradient(to right, #3a1c71, #d76d77, #ffaf7b);
-$sweet-morning: linear-gradient(to right, #ff5f6d, #ffc371);
-
-$peach: linear-gradient(45deg, #ffedbc, #ed4264);
-$sea-blue: linear-gradient(45deg, #2b5876, #4e4376);
-$celestial: linear-gradient(to bottom, #c33764, #1d2671);
-$heavy-rain: linear-gradient(to bottom, #cfd9df, #e2ebf0);
-$winter-neva: linear-gradient(to bottom, #a1c4fd, #c2e9fb);
-$saint-petersberg: linear-gradient(45deg, #f5f7fa, #c3cfe2);
-
 @mixin text-gradient-clip() {
     background-clip: text;
     color: transparent;
@@ -160,7 +139,7 @@ a:hover {
 body > header {
     h1 {
         font-size: $h1-font-size * 1.5;
-        a { color: $gray-600; }
+        a { color: $main-title-color; }
 
         @include media-breakpoint-down(md) {
             line-height: $h1-font-size * 1.5;
@@ -176,7 +155,7 @@ body > div > nav {
     /* background-image: linear-gradient(to right, #fdfc47, #24fe41); */
     @include text-gradient-clip();
     display: inline-block;  /* make it take as little width as possible */
-    background-image: $roseanna;
+    background-image: $nav-gradient;
 
     ul li a:hover {
         background-image: linear-gradient(to bottom, transparent 35%, $link-bg-color 35%, $link-bg-color 65%, transparent 65%);
@@ -190,33 +169,32 @@ body > main {
         display: inline-block;
     }
 
-    h1 { background-image: $sweet-morning; }
-    h2 { background-image: $lush; }
-    h3 { background-image: $relay; }
+    h1 { background-image: $h1-gradient; }
+    h2 { background-image: $h2-gradient; }
+    h3 { background-image: $h3-gradient; }
 
     strong {
         @include text-gradient-clip();
-        background-image: $celestial;
+        background-image: $emphasis-gradient;
     }
 
     aside, aside a {
-        color: $gray-600;
+        color: $content-metadata-color;
     }
 }
 
 body > footer {
     font-size: $font-size-sm;
 
-    background: $gray-600;
-    color: $link-bg-color;
-    /* background: #FFFC94; color: $gray-600; */
+    background-color: $footer-bg-color;
+    color: $footer-color;
 
     a {
         color: $link-bg-color;
         text-decoration: underline;
     }
     a:hover {
-        color: red;
+        color: $footer-link-hover-color;
         background: none;
     }
 
@@ -232,7 +210,7 @@ body > footer {
 
 
 code {
-    background-image: $saint-petersberg;
+    background-image: $code-background-gradient;
     border-radius: 3px;
     padding: 3px;
 }
@@ -252,22 +230,22 @@ div.admonition {
         font-family: $font-family-serif;
 
         @include text-gradient-clip();
-        background-image: $celestial;
+        background-image: $admonition-title-gradient;
     }
 }
 
 div.admonition:not(.admonition-acknowledgement) {
-    background: #F4F9ED;
+    background: $admonition-bg-color;
     border-radius: 15px;
     box-shadow: 0 1px 3px $gray-200;
 }
 
 div.admonition-acknowledgement {
     p.admonition-title {
-        background-image: $winter-neva;
+        background-image: $acknowledgement-title-gradient;
     }
 
-    color: $gray-600;
+    color: $content-metadata-color;
     font-size: $font-size-sm;
     background: none;
 }

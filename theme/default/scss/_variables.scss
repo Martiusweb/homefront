@@ -1,13 +1,61 @@
-// Customized boostrap variables (and our own, if we want)t
+// Customized boostrap variables (and our own, if we want)
 
-@import url('https://fonts.googleapis.com/css?family=Playfair+Display|Lato');
+@import url('https://fonts.googleapis.com/css?family=Playfair+Display|Lato&display=optional');
 
 // Fonts
 $font-family-serif:           'Playfair Display', serif;
 $font-family-sans-serif:      Lato, "Helvetica Neue", Arial, "Noto Sans", sans-serif !default;
 $font-family-monospace:       SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
 
-
 // Colors
-$link-color: #1E37E6; /* #FF544B; */
-$link-bg-color: #74FFCF;  /* a very flashy green/blue */
+
+// Blue
+$primary-blue: #1E37E6;
+$flashy-green-blue: #74FFCF;
+
+// Red
+$soft-red: #FF544B;
+
+// Green
+$light-green: #F4F9ED;
+
+// Gradients
+// see: https://digitalsynopsis.com/design/beautiful-color-ui-gradients-backgrounds/
+$roseanna: linear-gradient(to right, #ffafbd, #ffc3a0); // Soft-warm pink gradient
+$lush: linear-gradient(to right,  #56ab2f, #a8e063); // green gradient
+$relay: linear-gradient(to right, #3a1c71, #d76d77, #ffaf7b); // violet-pink-yellow
+$sweet-morning: linear-gradient(to right, #ff5f6d, #ffc371); // Sunny pink-red/orange
+
+$celestial: linear-gradient(to bottom, #c33764, #1d2671); // violet, to bottom
+
+$saint-petersberg: linear-gradient(45deg, #f5f7fa, #c3cfe2); // blue-gray, 45°
+
+$peach: linear-gradient(45deg, #ffedbc, #ed4264);
+$sea-blue: linear-gradient(45deg, #2b5876, #4e4376);
+$heavy-rain: linear-gradient(to bottom, #cfd9df, #e2ebf0);
+$winter-neva: linear-gradient(to bottom, #a1c4fd, #c2e9fb); // light blue, to bottom
+
+
+// Colors of selected elements
+$link-color: $primary-blue;
+$link-bg-color: $flashy-green-blue;
+
+$main-title-color: $gray-600;
+$nav-gradient: $roseanna;
+
+$footer-bg-color: $gray-600;
+$footer-color: $flashy-green-blue;
+$footer-link-hover-color: red;
+
+
+$h1-gradient: $sweet-morning;
+$h2-gradient: $lush;
+$h3-gradient: $relay;
+$emphasis-gradient: $celestial;
+$content-metadata-color: $gray-600;
+$code-background-gradient: $saint-petersberg;
+
+$admonition-bg-color: $light-green;
+$admonition-title-gradient: $celestial;
+$acknowledgement-title-gradient: $winter-neva;
+
