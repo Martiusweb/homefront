@@ -9,6 +9,18 @@ $font-family-monospace:       SFMono-Regular, Menlo, Monaco, Consolas, "Liberati
 
 // Colors
 
+// palette from http://frontierimaginaries.org/
+$fi-red: #ff5518;
+$fi-green: #00df68;
+$fi-yellow: #ffdc50;
+$fi-blue: #31a8f7;
+
+// from https://mycolor.space/
+$red-skip-gradient: linear-gradient(to right, $fi-red, #ffbdcc, #ff8696, #c55063);
+$red-small-switch-gradient: linear-gradient(45deg, $fi-red 55%, #fee6e2);
+$green-skip-gradient: linear-gradient(45deg, $fi-green 40%, #99e059, #d9de63, #ffde82);
+$yellow-spot:  linear-gradient(45deg, $fi-yellow 45%, #b8a671);
+
 // Blue
 $primary-blue: #1E37E6;
 $flashy-green-blue: #74FFCF;
@@ -19,6 +31,9 @@ $soft-red: #FF544B;
 // Green
 $light-green: #F4F9ED;
 
+// Gray
+$gray-600: #6c757d; // copied from bootstrap _variables
+
 // Gradients
 // see: https://digitalsynopsis.com/design/beautiful-color-ui-gradients-backgrounds/
 $roseanna: linear-gradient(to right, #ffafbd, #ffc3a0); // Soft-warm pink gradient
@@ -27,30 +42,25 @@ $relay: linear-gradient(to right, #3a1c71, #d76d77, #ffaf7b); // violet-pink-yel
 $sweet-morning: linear-gradient(to right, #ff5f6d, #ffc371); // Sunny pink-red/orange
 
 $celestial: linear-gradient(to bottom, #c33764, #1d2671); // violet, to bottom
-
 $saint-petersberg: linear-gradient(45deg, #f5f7fa, #c3cfe2); // blue-gray, 45°
-
-$peach: linear-gradient(45deg, #ffedbc, #ed4264);
-$sea-blue: linear-gradient(45deg, #2b5876, #4e4376);
-$heavy-rain: linear-gradient(to bottom, #cfd9df, #e2ebf0);
 $winter-neva: linear-gradient(to bottom, #a1c4fd, #c2e9fb); // light blue, to bottom
 
 
 // Colors of selected elements
 $link-color: $primary-blue;
-$link-bg-color: $flashy-green-blue;
+$link-bg-color: $fi-yellow;
 
 $main-title-color: $gray-600;
 $nav-gradient: $roseanna;
 
-$footer-bg-color: $gray-600;
-$footer-color: $flashy-green-blue;
-$footer-link-hover-color: red;
+$footer-bg-color: #3c4856;
+$footer-color: $fi-blue;
+$footer-link-hover-color: $fi-red;
 
 
-$h1-gradient: $sweet-morning;
-$h2-gradient: $lush;
-$h3-gradient: $relay;
+$h1-gradient: $red-small-switch-gradient;
+$h2-gradient: $green-skip-gradient;
+$h3-gradient: $yellow-spot;
 $emphasis-gradient: $celestial;
 $content-metadata-color: $gray-600;
 $code-background-gradient: $saint-petersberg;
