@@ -1,0 +1,23 @@
+<section>
+    {% set ns = namespace(current_year=0) %}
+    {% for playlist in spotify.playlists.reverse_iter() %}
+    {% if ns.current_year != playlist.year %}
+    {# new year, close the previous list if this is not the first #}
+    {% if ns.current_year != 0 %}
+    </ol>
+    {% endif %}
+    <h3>Playlists of {{ playlist.year }}</h3>
+    <ol class="post-list">
+    {% set ns.current_year = playlist.year %}
+    {% endif %}
+    <li><article>
+        <p>🎵 <a href="{{ SITEURL }}/spotify/{{playlist.year}}-{{ '%02d' % playlist.month}}.html" rel="bookmark" title="Permalink to {{
+            playlist.name|striptags }}">{{ playlist.name }}</a></p>
+        <div class="summary">{{ playlist.nb_tracks }} tracks, with
+            {% for track in spotify.tracks.tracks_of(playlist).values()|slice(5)|first %}{{ track.artists[0] }}, {% endfor %}…</div>
+    </article></li>
+    {% endfor %}
+    {% if ns.current_year != 0 %}
+    </ol>
+    {% endif %}
+</section>

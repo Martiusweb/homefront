@@ -71,3 +71,5 @@ DATE_FORMATS = {
     'fr': '%d %b %Y',
     'en': '%d %b %Y',
 }
+
+PLUGINS = ("homefront.pelican.spotify", )

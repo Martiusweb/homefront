@@ -11,4 +11,13 @@ It is based on:
 Quickstart
 ----------
 
-TODO
+First time, do:
+
+ * set settings.py for festune
+ * npm preinstall
+ * npm install
+
+npm run-script festune-login to setup spotify credentials (see
+Martiusweb/festune for how to configure settings.py).
+
+npm install generate all output.

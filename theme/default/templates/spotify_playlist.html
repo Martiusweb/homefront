@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block html_lang %}{{ DEFAULT_LANG }}{% endblock %}
+
+{% block title %}{{ playlist.name }} - {{ SITENAME }}{%endblock%}
+{% block body_class %}content playlist{%endblock%}
+
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+<article>
+    <h1>{{ playlist.name }}</h1>
+
+    <p class="playlist-link">
+    {% if playlist.image %}
+    <a href="{{playlist.external_url}}" target="_blank" class="playlist-image">
+    <img src="{{ playlist.image }}" alt="Playlist illustration">
+    </a>
+    {% endif %}
+
+    <a href="{{playlist.external_url}}" target="_blank">Listen to this playlist
+        on Spotify!</a></p>
+
+    <ol>
+    {% for _, track in tracks %}
+        <li><span class="track-artist">{{track.artists[0]}}</span> -
+            <span class="track-name">{{track.name}}</span></li>
+    {% endfor %}
+    </ol>
+</article>
+{% endblock %}

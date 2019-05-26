@@ -4,8 +4,9 @@
   "description": "Boilerplate for a static website, with kilograms of js deps",
   "private": true,
   "scripts": {
-    "preinstall": "if [ ! -d venv ] ; then python -m venv venv && . venv/bin/activate && python setup.py develop; fi",
+    "preinstall": "if [ ! -d venv ] ; then python -m venv venv && . venv/bin/activate && python setup.py develop; fi ; if [ ! -d festune_data ] ; then npm run-script festune-login ; fi",
     "install": "npm run-script css && npm run-script js && npm run-script html",
+    "festune-login": ". venv/bin/activate && festune-login",
     "test": "echo \"Error: no test specified\" && exit 1",
     "html": "npm run-script html-update && npm run-script html-compile && npm run-script html-minify",
     "html-update": "if [ ! -d output/t ] ; then git submodule update --init ; else  cd output/t && git reset --hard && git clean -fxd && git pull origin master; fi",

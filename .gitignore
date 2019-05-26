@@ -4,4 +4,5 @@ output/
 __pycache__
 *.py[oc]
 node_modules
-
+settings.py
+festune_data/

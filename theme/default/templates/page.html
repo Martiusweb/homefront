@@ -31,4 +31,8 @@
         </p>
     {% endif %}
 </article>
+
+{% if page.slug == "misc" %}
+{% include "spotify.html" %}
+{% endif %}
 {% endblock %}
