@@ -13,9 +13,9 @@
     <h1>{{ playlist.name }}</h1>
 
     <p class="playlist-link">
-    {% if playlist.image %}
+    {% if playlist.images %}
     <a href="{{playlist.external_url}}" target="_blank" class="playlist-image">
-    <img src="{{ playlist.image }}" alt="Playlist illustration">
+    <img src="{{ playlist.images.largest().url }}" alt="Playlist illustration">
     </a>
     {% endif %}
 
