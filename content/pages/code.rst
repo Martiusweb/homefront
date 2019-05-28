@@ -27,7 +27,7 @@ Festune
 -------
 
 `Festune <https://github.com/Martiusweb/festune>`_ is a collection of scripts
-I use to manage my spotify playlists. I allows me to find duplicates between
+I use to manage my spotify playlists. It allows me to find duplicates between
 playlists, and generate others automatically.
 
 I consider this project as a pet project. It's open-source so anyone can look

@@ -33,7 +33,7 @@ class SpotifyPlaylistGenerator(pelican.generators.Generator):
                 f"spotify/{playlist.year}-{playlist.month:02d}.html",
                 self.get_template("spotify_playlist"),
                 self.context, playlist=playlist,
-                tracks=self.tracks.tracks_of(playlist).items())
+                tracks=sorted(self.tracks.tracks_of(playlist).items()))
 
 
 def get_generators(_):

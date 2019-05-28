@@ -22,11 +22,24 @@
     <a href="{{playlist.external_url}}" target="_blank">Listen to this playlist
         on Spotify!</a></p>
 
-    <ol>
-    {% for _, track in tracks %}
-        <li><span class="track-artist">{{track.artists[0]}}</span> -
-            <span class="track-name">{{track.name}}</span></li>
-    {% endfor %}
-    </ol>
+
+    <table>
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>Artist</th>
+                <th>Track</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for nb, track in tracks %}
+            <tr>
+                <th>{{ nb + 1 }}</th>
+                <td>{{ track.artists[0] }}</td>
+                <td>{{ track.name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </article>
 {% endblock %}

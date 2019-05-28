@@ -340,3 +340,23 @@ main {
 .track-artist {
     font-weight: bold;
 }
+
+.playlist {
+    table {
+        @extend .table, .table-striped, .my-3;
+
+        border: 3px $gray-400 ridge;
+        box-shadow: 10px 10px $gray-400;
+
+        border-collapse: separate;
+        border-spacing: 2px;
+
+        td, th {
+            border: 1px $gray-400 solid;
+        }
+    }
+
+    thead {
+        @extend .thead-dark;
+    }
+}
