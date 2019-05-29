@@ -8,6 +8,8 @@
 
 /* Base layout */
 body > header {
+    @extend .pt-2;
+
     @include media-breakpoint-up(lg) {
         @extend .pt-lg-5;
     }
