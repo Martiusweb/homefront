@@ -25,6 +25,17 @@ body > div {
         @include make-container;
     }
 
+    /* reduce text size with small screens */
+    @include media-breakpoint-down(sm) {
+        padding: 0;
+        nav {
+            padding: 0;
+            li {
+                font-size: $font-size-base * .95;
+            }
+        }
+    }
+
     /* nav position */
     ul {
         @extend .nav, .justify-content-center;
