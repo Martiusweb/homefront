@@ -187,8 +187,13 @@ body > main {
 body > footer {
     font-size: $font-size-sm;
 
-    background-color: $footer-bg-color;
     color: $footer-color;
+    text-shadow: 1px 1px 1px $gray-600;
+    background-image: $footer-bg-gradient;
+
+    div {
+        margin: 2rem;
+    }
 
     a {
         color: $link-bg-color;
