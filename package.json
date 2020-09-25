@@ -32,15 +32,15 @@
   "homepage": "https://github.com/Martiusweb/homefront#readme",
   "dependencies": {
     "bootstrap": "^4.3.1",
-    "jquery": "^3.4.1",
-    "npx": "^10.2.0",
+    "jquery": "^3.5.1",
+    "npx": "^10.2.2",
     "popper.js": "^1.15.0"
   },
   "devDependencies": {
     "autoprefixer": "^9.5.1",
     "clean-css-cli": "^4.3.0",
     "html-minifier": "^4.0.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.14.1",
     "node-sass-package-importer": "^5.3.1",
     "postcss": "^7.0.15",
     "postcss-cli": "^6.1.2",
