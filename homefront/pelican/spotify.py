@@ -2,7 +2,7 @@
 import festune.index
 import festune.playlist
 
-import pelican.signals
+from pelican import signals as pelican_signals
 import pelican.generators
 
 
@@ -41,5 +41,5 @@ def get_generators(_):
 
 
 def register():
-    pelican.signals.get_generators.connect(get_generators)
-    pelican.signals.generator_init.connect(SpotifyPlaylistGenerator.init)
+    pelican_signals.get_generators.connect(get_generators)
+    pelican_signals.generator_init.connect(SpotifyPlaylistGenerator.init)
